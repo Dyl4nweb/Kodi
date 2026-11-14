@@ -101,7 +101,7 @@ pub fn run() {
 
             // Initial positioning of the window at screen top center
             if let Some(w) = app.get_webview_window("main") {
-                let _ = window::set_island_mode(w.as_ref().window(), "compact".to_string(), None, None);
+                let _ = window::set_island_mode((*w).clone(), "compact".to_string(), None, None);
             }
 
             Ok(())
