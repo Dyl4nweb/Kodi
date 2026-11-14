@@ -417,8 +417,8 @@ export const WebLandingPage: React.FC = () => {
                 <Music className="h-4 w-4 text-emerald-400" />
               </div>
               <div className="overflow-hidden">
-                <div className="text-xs font-medium text-white truncate">Resonance</div>
-                <div className="text-[10px] text-zinc-500 truncate">KODI Chillhop · Lo-Fi Sessions</div>
+                <div className="text-xs font-medium text-white truncate">Sample Audio Track</div>
+                <div className="text-[10px] text-zinc-500 truncate">Interactive Demo · Sample Only</div>
               </div>
             </div>
           </div>

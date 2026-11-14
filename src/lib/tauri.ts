@@ -9,19 +9,19 @@ import { webAudioSynth } from './webAudioSynth';
 
 const DEMO_PLAYLIST = [
   {
-    title: 'Resonance',
-    artist: 'KODI Chillhop',
-    album: 'Lo-Fi Sessions Vol. 1',
+    title: 'Sample Audio Track',
+    artist: 'Interactive Demo',
+    album: 'KODI Sample Audio',
   },
   {
-    title: 'Midnight Horizon',
-    artist: 'Synthwave Dreams',
-    album: 'Nightdrive FM',
+    title: 'Sample Audio (Ambient)',
+    artist: 'Interactive Demo',
+    album: 'KODI Sample Audio',
   },
   {
-    title: 'Deep Focus & Code',
-    artist: 'Ambient Flow',
-    album: 'Developer Zen',
+    title: 'Sample Audio (Lo-Fi)',
+    artist: 'Interactive Demo',
+    album: 'KODI Sample Audio',
   },
 ];
 let currentTrackIdx = 0;
