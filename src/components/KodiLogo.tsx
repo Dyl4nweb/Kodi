@@ -19,7 +19,7 @@ export const KodiLogo: React.FC<KodiLogoProps> = ({
         src="/kodi-icon.png"
         alt="KODI"
         style={{ height: `${size}px`, width: `${size}px` }}
-        className={`rounded-md object-contain select-none ${className}`}
+        className={`object-contain select-none ${className}`}
       />
     );
   }
@@ -35,3 +35,4 @@ export const KodiLogo: React.FC<KodiLogoProps> = ({
     />
   );
 };
+

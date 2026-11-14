@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowRight,
   BrainCircuit,
   Check,
   ChevronDown,
+  ChevronUp,
   Copy,
   Cpu,
   Download,
@@ -30,6 +31,7 @@ import { useKodiState } from '@/hooks/useKodiState';
 
 export const WebLandingPage: React.FC = () => {
   const [copiedWinget, setCopiedWinget] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const repoUrl = 'https://github.com/Dyl4nweb/Kodi';
   const downloadUrl = `${repoUrl}/releases/latest/download/KODI_1.0.0_x64-setup.exe`;
 
@@ -51,6 +53,22 @@ export const WebLandingPage: React.FC = () => {
     isMovieMode,
     toggleMovieMode,
   } = useKodiState();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowBackToTop(true);
+      } else {
+        setShowBackToTop(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleCopyWinget = () => {
     navigator.clipboard.writeText('winget install Dyl4nweb.Kodi');
@@ -120,9 +138,11 @@ export const WebLandingPage: React.FC = () => {
       <section className="relative z-10 mx-auto max-w-5xl px-6 pt-10 pb-16 text-center">
         {/* Official App Icon Showcase */}
         <div className="flex justify-center mb-6">
-          <div className="relative p-1.5 rounded-3xl bg-gradient-to-b from-sky-500/40 via-sky-500/10 to-transparent shadow-[0_0_40px_rgba(56,189,248,0.3)]">
-            <KodiLogo size={68} variant="icon" className="rounded-2xl shadow-2xl" />
-          </div>
+          <KodiLogo
+            size={84}
+            variant="icon"
+            className="drop-shadow-[0_16px_36px_rgba(56,189,248,0.28)] hover:scale-105 transition-transform duration-300 cursor-pointer"
+          />
         </div>
 
         {/* Release Pill Tag */}
@@ -439,6 +459,23 @@ export const WebLandingPage: React.FC = () => {
           </a>
         </div>
       </footer>
+
+      {/* Floating Back to Top Button */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 10 }}
+            onClick={scrollToTop}
+            title="Back to Top"
+            className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full border border-white/15 bg-black/80 backdrop-blur-md px-4 py-2.5 text-xs font-medium text-zinc-300 shadow-[0_10px_30px_rgba(0,0,0,0.8)] hover:border-sky-500/50 hover:bg-black/95 hover:text-white transition-all active:scale-95 cursor-pointer"
+          >
+            <ChevronUp className="h-4 w-4 text-sky-400" />
+            <span>Back to top</span>
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

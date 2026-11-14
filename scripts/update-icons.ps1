@@ -43,3 +43,4 @@ $bmp256.Dispose()
 $srcImg.Dispose()
 
 Write-Host "Icons successfully updated with user official logo!"
+
