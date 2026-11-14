@@ -16,6 +16,7 @@ import {
   X,
 } from 'lucide-react';
 import { KodiSettings } from '@/types';
+import { KodiLogo } from './KodiLogo';
 
 interface SettingsModalProps {
   settings: KodiSettings | null;
@@ -73,9 +74,9 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
     <div className="flex h-full flex-col overflow-hidden rounded-3xl bg-[#000000] border border-white/[0.08] text-zinc-100 shadow-[0_24px_60px_rgba(0,0,0,0.95)]">
       {/* Modal Header */}
       <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
-        <div className="flex items-center gap-2">
-          <Sliders className="h-4 w-4 text-sky-400" />
-          <h2 className="text-sm font-semibold tracking-wide">KODI Settings</h2>
+        <div className="flex items-center gap-2.5">
+          <KodiLogo size={18} variant="blue" />
+          <span className="text-xs text-zinc-400 font-medium">| Preferences</span>
         </div>
         <div className="flex items-center gap-2">
           {savedSuccess && (

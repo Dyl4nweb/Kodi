@@ -22,6 +22,7 @@ import { MediaWidget } from './widgets/MediaWidget';
 import { SystemWidget } from './widgets/SystemWidget';
 import { QuickActionsWidget } from './widgets/QuickActionsWidget';
 import { AntigravityLogo } from './AntigravityLogo';
+import { KodiLogo } from './KodiLogo';
 
 interface ExpandedNotchProps {
   activeTab: ActiveTab;
@@ -99,10 +100,7 @@ export const ExpandedNotch: React.FC<ExpandedNotchProps> = ({
             title="Click to collapse notch (Back up)"
             className="flex items-center gap-1.5 flex-shrink-0 cursor-pointer rounded-lg px-1.5 py-1 transition-all hover:bg-white/5 active:scale-95"
           >
-            <AntigravityLogo size={16} glow />
-            <span className="text-xs font-bold tracking-wider text-zinc-100 font-mono">
-              KODI
-            </span>
+            <KodiLogo size={19} variant="blue" />
           </div>
 
           {/* Center: Sleek Tab Switcher */}

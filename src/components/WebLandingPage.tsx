@@ -22,6 +22,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { AntigravityLogo } from './AntigravityLogo';
+import { KodiLogo } from './KodiLogo';
 import { CompactPill } from './CompactPill';
 import { ExpandedNotch } from './ExpandedNotch';
 import { SettingsModal } from './SettingsModal';
@@ -68,10 +69,7 @@ export const WebLandingPage: React.FC = () => {
       {/* Navigation Header */}
       <header className="relative z-50 mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <a href="#" className="flex items-center gap-2.5 group">
-          <AntigravityLogo size={22} glow />
-          <span className="text-lg font-bold tracking-wider font-mono text-white group-hover:text-sky-300 transition-colors">
-            KODI
-          </span>
+          <KodiLogo size={28} variant="blue" />
           <span className="rounded-full border border-sky-500/30 bg-sky-500/10 px-2 py-0.5 text-[10px] font-semibold text-sky-400">
             v1.0.0
           </span>
@@ -119,9 +117,16 @@ export const WebLandingPage: React.FC = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative z-10 mx-auto max-w-5xl px-6 pt-12 pb-16 text-center">
+      <section className="relative z-10 mx-auto max-w-5xl px-6 pt-10 pb-16 text-center">
+        {/* Official App Icon Showcase */}
+        <div className="flex justify-center mb-6">
+          <div className="relative p-1.5 rounded-3xl bg-gradient-to-b from-sky-500/40 via-sky-500/10 to-transparent shadow-[0_0_40px_rgba(56,189,248,0.3)]">
+            <KodiLogo size={68} variant="icon" className="rounded-2xl shadow-2xl" />
+          </div>
+        </div>
+
         {/* Release Pill Tag */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs text-zinc-300 backdrop-blur-md mb-6 shadow-sm">
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1 text-xs text-zinc-300 backdrop-blur-md mb-6 shadow-sm">
           <Sparkles className="h-3 w-3 text-sky-400" />
           <span>The Next-Generation Dynamic Island for Windows 10 & 11</span>
         </div>
@@ -401,8 +406,8 @@ export const WebLandingPage: React.FC = () => {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/5 mx-auto max-w-6xl px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
-        <div className="flex items-center gap-2">
-          <AntigravityLogo size={14} />
+        <div className="flex items-center gap-3">
+          <KodiLogo size={18} variant="white" />
           <span>© 2026 KODI. Created with passion for the developer community.</span>
         </div>
 
