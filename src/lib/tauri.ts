@@ -28,7 +28,16 @@ let currentTrackIdx = 0;
 
 // Safely check if Tauri environment is available
 export function isTauriEnvironment(): boolean {
-  return typeof window !== 'undefined' && ('__TAURI_INTERNALS__' in window || '__TAURI__' in window);
+  if (typeof window === 'undefined') return false;
+  return (
+    '__TAURI_INTERNALS__' in window ||
+    '__TAURI__' in window ||
+    Boolean((window as any).__TAURI_IPC__) ||
+    Boolean((window as any).__TAURI_METADATA__) ||
+    window.location.hostname === 'tauri.localhost' ||
+    window.location.protocol === 'tauri:' ||
+    (typeof navigator !== 'undefined' && /tauri/i.test(navigator.userAgent))
+  );
 }
 
 // Live Hardware Battery Listener for browser fallback (Chrome, Edge, Opera)
@@ -89,10 +98,22 @@ const fallbackSettings: KodiSettings = {
 };
 
 export async function invokeCommand<T>(cmd: string, args: Record<string, any> = {}): Promise<T> {
-  if (isTauriEnvironment()) {
+  const normalizedArgs: Record<string, any> = { ...args };
+  if (args.custom_width !== undefined) normalizedArgs.customWidth = args.custom_width;
+  if (args.custom_height !== undefined) normalizedArgs.customHeight = args.custom_height;
+  if (args.customWidth !== undefined) normalizedArgs.custom_width = args.customWidth;
+  if (args.customHeight !== undefined) normalizedArgs.custom_height = args.customHeight;
+
+  if (typeof window !== 'undefined') {
     try {
-      const { invoke } = await import('@tauri-apps/api/core');
-      return await invoke<T>(cmd, args);
+      const globalTauri = (window as any).__TAURI__;
+      if (globalTauri?.core?.invoke) {
+        return await globalTauri.core.invoke(cmd, normalizedArgs);
+      }
+      if (isTauriEnvironment()) {
+        const { invoke } = await import('@tauri-apps/api/core');
+        return await invoke<T>(cmd, normalizedArgs);
+      }
     } catch (err) {
       console.warn(`[Tauri] Native invoke '${cmd}' failed, using fallback handler:`, err);
     }

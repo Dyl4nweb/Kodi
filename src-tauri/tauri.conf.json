@@ -10,6 +10,7 @@
     "frontendDist": "../out"
   },
   "app": {
+    "withGlobalTauri": true,
     "windows": [
       {
         "title": "KODI",
@@ -20,17 +21,14 @@
         "transparent": true,
         "decorations": false,
         "alwaysOnTop": true,
-        "skipTaskbar": true,
+        "skipTaskbar": false,
         "shadow": false,
-        "center": false
+        "center": false,
+        "visible": true
       }
     ],
-    "trayIcon": {
-      "iconPath": "icons/icon.png",
-      "tooltip": "KODI — Dynamic Island"
-    },
     "security": {
-      "csp": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: asset:; font-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost"
+      "csp": null
     }
   },
   "bundle": {
@@ -64,4 +62,3 @@
     "shell": {}
   }
 }
-

@@ -13,9 +13,19 @@ import { Film } from 'lucide-react';
 
 export default function KodiIslandPage() {
   const [mounted, setMounted] = useState(false);
+  const [isWebBrowser, setIsWebBrowser] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    const isExternalWeb =
+      typeof window !== 'undefined' &&
+      (window.location.hostname.includes('vercel.app') ||
+        window.location.hostname.includes('github.io') ||
+        (window.location.hostname === 'localhost' && window.location.port === '3000'));
+
+    if (isExternalWeb && !isTauriEnvironment()) {
+      setIsWebBrowser(true);
+    }
   }, []);
 
   const {
@@ -62,7 +72,7 @@ export default function KodiIslandPage() {
   }
 
   // When loaded in a web browser (Vercel, GitHub Pages, Chrome, etc.), show the full Product Landing Page
-  if (!isTauriEnvironment()) {
+  if (isWebBrowser) {
     return <WebLandingPage />;
   }
 
