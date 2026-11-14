@@ -53,8 +53,8 @@ fn read_windows_power_status() -> (Option<u8>, Option<bool>, Option<bool>, Optio
             // BatteryFlag: bit 3 (8) = Charging
             let is_charging = (status.BatteryFlag & 8) != 0 || (ac_online && percent.map_or(false, |p| p < 100));
 
-            let life_secs = if status.BatteryLifeTime > 0 {
-                Some(status.BatteryLifeTime)
+            let life_secs = if status.BatteryLifeTime > 0 && status.BatteryLifeTime != u32::MAX {
+                Some(status.BatteryLifeTime as i32)
             } else {
                 None
             };
@@ -90,7 +90,6 @@ pub fn get_system_stats(state: tauri::State<'_, SystemState>) -> Result<SystemSt
 
     let (battery_percent, battery_charging, battery_ac_online, battery_life_time_secs) = read_windows_power_status();
 
-    // Check online status by checking if default network gateway or socket resolves or simply sys info
     let uptime_seconds = System::uptime();
 
     Ok(SystemStats {
@@ -106,4 +105,3 @@ pub fn get_system_stats(state: tauri::State<'_, SystemState>) -> Result<SystemSt
         uptime_seconds,
     })
 }
-

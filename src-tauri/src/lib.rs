@@ -14,7 +14,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_autostart::init(
-            tauri_plugin_autostart::MacOsLauncher::LaunchAgent,
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
             Some(vec!["--autostart"]),
         ))
         .plugin(tauri_plugin_notification::init())
@@ -105,7 +105,7 @@ pub fn run() {
 
             // Initial positioning of the window at screen top center
             if let Some(w) = app.get_webview_window("main") {
-                let _ = window::apply_island_mode(w.as_ref(), "compact", None, None);
+                let _ = window::apply_island_mode(&w, "compact", None, None);
             }
 
             Ok(())

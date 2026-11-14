@@ -1,4 +1,4 @@
-use tauri::{LogicalPosition, LogicalSize, Monitor, Window};
+use tauri::{LogicalPosition, LogicalSize, Monitor, WebviewWindow};
 
 #[derive(serde::Deserialize, serde::Serialize, Debug, Clone)]
 pub struct WindowDimensions {
@@ -9,7 +9,7 @@ pub struct WindowDimensions {
 }
 
 pub fn apply_island_mode(
-    window: &Window,
+    window: &WebviewWindow,
     mode: &str,
     custom_width: Option<f64>,
     custom_height: Option<f64>,
@@ -72,7 +72,7 @@ pub fn apply_island_mode(
 
 #[tauri::command]
 pub fn set_island_mode(
-    window: Window,
+    window: WebviewWindow,
     mode: String,
     custom_width: Option<f64>,
     custom_height: Option<f64>,
@@ -81,25 +81,25 @@ pub fn set_island_mode(
 }
 
 #[tauri::command]
-pub fn center_island(window: Window) -> Result<(), String> {
-    set_island_mode(window, "compact".to_string(), None, None)?;
+pub fn center_island(window: WebviewWindow) -> Result<(), String> {
+    apply_island_mode(&window, "compact", None, None)?;
     Ok(())
 }
 
 #[tauri::command]
-pub fn hide_island(window: Window) -> Result<(), String> {
+pub fn hide_island(window: WebviewWindow) -> Result<(), String> {
     window.hide().map_err(|e| e.to_string())
 }
 
 #[tauri::command]
-pub fn show_island(window: Window) -> Result<(), String> {
+pub fn show_island(window: WebviewWindow) -> Result<(), String> {
     window.show().map_err(|e| e.to_string())?;
     window.set_focus().map_err(|e| e.to_string())?;
     Ok(())
 }
 
 #[tauri::command]
-pub fn toggle_visibility(window: Window) -> Result<bool, String> {
+pub fn toggle_visibility(window: WebviewWindow) -> Result<bool, String> {
     if window.is_visible().unwrap_or(false) {
         window.hide().map_err(|e| e.to_string())?;
         Ok(false)

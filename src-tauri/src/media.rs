@@ -30,16 +30,43 @@ impl Default for MediaSessionState {
 #[cfg(windows)]
 mod win_media {
     use super::MediaSessionState;
-    use base64::prelude::*;
     use windows::Media::Control::{
         GlobalSystemMediaTransportControlsSession,
         GlobalSystemMediaTransportControlsSessionManager,
         GlobalSystemMediaTransportControlsSessionPlaybackStatus,
     };
-    use windows::Storage::Streams::DataReader;
 
-    async fn get_active_session() -> Result<Option<GlobalSystemMediaTransportControlsSession>, Box<dyn std::error::Error>> {
-        let manager = GlobalSystemMediaTransportControlsSessionManager::RequestAsync()?.await?;
+    fn wait_op<T: windows::core::Interface + Clone + 'static>(
+        op: windows::Foundation::IAsyncOperation<T>,
+    ) -> Result<T, Box<dyn std::error::Error>> {
+        let (tx, rx) = std::sync::mpsc::channel();
+        let handler = windows::Foundation::AsyncOperationCompletedHandler::new(move |_, _| {
+            let _ = tx.send(());
+            Ok(())
+        });
+        op.SetCompleted(&handler)?;
+        let _ = rx.recv_timeout(std::time::Duration::from_millis(800));
+        let res = op.GetResults()?;
+        Ok(res)
+    }
+
+    fn wait_bool(
+        op: windows::Foundation::IAsyncOperation<bool>,
+    ) -> Result<bool, Box<dyn std::error::Error>> {
+        let (tx, rx) = std::sync::mpsc::channel();
+        let handler = windows::Foundation::AsyncOperationCompletedHandler::new(move |_, _| {
+            let _ = tx.send(());
+            Ok(())
+        });
+        op.SetCompleted(&handler)?;
+        let _ = rx.recv_timeout(std::time::Duration::from_millis(800));
+        let res = op.GetResults()?;
+        Ok(res)
+    }
+
+    fn get_active_session() -> Result<Option<GlobalSystemMediaTransportControlsSession>, Box<dyn std::error::Error>> {
+        let op = GlobalSystemMediaTransportControlsSessionManager::RequestAsync()?;
+        let manager = wait_op(op)?;
         
         let mut playing_session: Option<GlobalSystemMediaTransportControlsSession> = None;
         let mut spotify_session: Option<GlobalSystemMediaTransportControlsSession> = None;
@@ -91,8 +118,8 @@ mod win_media {
         Ok(None)
     }
 
-    pub async fn query_media_state() -> Result<MediaSessionState, Box<dyn std::error::Error>> {
-        let session = match get_active_session().await? {
+    pub fn query_media_state() -> Result<MediaSessionState, Box<dyn std::error::Error>> {
+        let session = match get_active_session()? {
             Some(s) => s,
             None => return Ok(MediaSessionState::default()),
         };
@@ -113,7 +140,8 @@ mod win_media {
             raw_app_name
         };
 
-        let media_props = match session.TryGetMediaPropertiesAsync()?.await {
+        let op = session.TryGetMediaPropertiesAsync()?;
+        let media_props = match wait_op(op) {
             Ok(props) => props,
             Err(_) => return Ok(MediaSessionState::default()),
         };
@@ -126,30 +154,6 @@ mod win_media {
             return Ok(MediaSessionState::default());
         }
 
-        // Try reading album art thumbnail
-        let mut thumbnail_base64 = None;
-        if let Ok(thumb_ref) = media_props.Thumbnail() {
-            if let Ok(stream_op) = thumb_ref.OpenReadAsync() {
-                if let Ok(stream) = stream_op.await {
-                    if let Ok(size) = stream.Size() {
-                        if size > 0 && size < 5 * 1024 * 1024 {
-                            if let Ok(reader) = DataReader::CreateDataReader(&stream) {
-                                if let Ok(load_op) = reader.LoadAsync(size as u32) {
-                                    if load_op.await.is_ok() {
-                                        let mut buffer = vec![0u8; size as usize];
-                                        if reader.ReadBytes(&mut buffer).is_ok() {
-                                            let encoded = BASE64_STANDARD.encode(&buffer);
-                                            thumbnail_base64 = Some(format!("data:image/jpeg;base64,{}", encoded));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         Ok(MediaSessionState {
             is_active: true,
             title,
@@ -158,32 +162,32 @@ mod win_media {
             app_name,
             is_playing,
             is_spotify,
-            thumbnail_base64,
+            thumbnail_base64: None,
         })
     }
 
-    pub async fn play_pause() -> Result<bool, Box<dyn std::error::Error>> {
-        if let Some(session) = get_active_session().await? {
-            let res = session.TryTogglePlayPauseAsync()?.await?;
-            Ok(res)
+    pub fn play_pause() -> Result<bool, Box<dyn std::error::Error>> {
+        if let Some(session) = get_active_session()? {
+            let op = session.TryTogglePlayPauseAsync()?;
+            wait_bool(op)
         } else {
             Ok(false)
         }
     }
 
-    pub async fn next() -> Result<bool, Box<dyn std::error::Error>> {
-        if let Some(session) = get_active_session().await? {
-            let res = session.TrySkipNextAsync()?.await?;
-            Ok(res)
+    pub fn next() -> Result<bool, Box<dyn std::error::Error>> {
+        if let Some(session) = get_active_session()? {
+            let op = session.TrySkipNextAsync()?;
+            wait_bool(op)
         } else {
             Ok(false)
         }
     }
 
-    pub async fn previous() -> Result<bool, Box<dyn std::error::Error>> {
-        if let Some(session) = get_active_session().await? {
-            let res = session.TrySkipPreviousAsync()?.await?;
-            Ok(res)
+    pub fn previous() -> Result<bool, Box<dyn std::error::Error>> {
+        if let Some(session) = get_active_session()? {
+            let op = session.TrySkipPreviousAsync()?;
+            wait_bool(op)
         } else {
             Ok(false)
         }
@@ -194,7 +198,11 @@ mod win_media {
 pub async fn get_media_state() -> Result<MediaSessionState, String> {
     #[cfg(windows)]
     {
-        win_media::query_media_state().await.or_else(|_| Ok(MediaSessionState::default()))
+        tokio::task::spawn_blocking(|| {
+            win_media::query_media_state().unwrap_or_default()
+        })
+        .await
+        .map_err(|e| e.to_string())
     }
     #[cfg(not(windows))]
     {
@@ -206,7 +214,11 @@ pub async fn get_media_state() -> Result<MediaSessionState, String> {
 pub async fn media_toggle_play_pause() -> Result<bool, String> {
     #[cfg(windows)]
     {
-        win_media::play_pause().await.or_else(|_| Ok(false))
+        tokio::task::spawn_blocking(|| {
+            win_media::play_pause().unwrap_or(false)
+        })
+        .await
+        .map_err(|e| e.to_string())
     }
     #[cfg(not(windows))]
     {
@@ -218,7 +230,11 @@ pub async fn media_toggle_play_pause() -> Result<bool, String> {
 pub async fn media_next_track() -> Result<bool, String> {
     #[cfg(windows)]
     {
-        win_media::next().await.or_else(|_| Ok(false))
+        tokio::task::spawn_blocking(|| {
+            win_media::next().unwrap_or(false)
+        })
+        .await
+        .map_err(|e| e.to_string())
     }
     #[cfg(not(windows))]
     {
@@ -230,7 +246,11 @@ pub async fn media_next_track() -> Result<bool, String> {
 pub async fn media_previous_track() -> Result<bool, String> {
     #[cfg(windows)]
     {
-        win_media::previous().await.or_else(|_| Ok(false))
+        tokio::task::spawn_blocking(|| {
+            win_media::previous().unwrap_or(false)
+        })
+        .await
+        .map_err(|e| e.to_string())
     }
     #[cfg(not(windows))]
     {
