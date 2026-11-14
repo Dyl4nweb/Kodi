@@ -33,12 +33,27 @@ mod win_media {
     use windows::Media::Control::{
         GlobalSystemMediaTransportControlsSession,
         GlobalSystemMediaTransportControlsSessionManager,
+        GlobalSystemMediaTransportControlsSessionMediaProperties,
         GlobalSystemMediaTransportControlsSessionPlaybackStatus,
     };
 
-    fn wait_op<T: windows::core::Interface + Clone + 'static>(
-        op: windows::Foundation::IAsyncOperation<T>,
-    ) -> Result<T, Box<dyn std::error::Error>> {
+    fn wait_manager(
+        op: windows::Foundation::IAsyncOperation<GlobalSystemMediaTransportControlsSessionManager>,
+    ) -> Result<GlobalSystemMediaTransportControlsSessionManager, Box<dyn std::error::Error>> {
+        let (tx, rx) = std::sync::mpsc::channel();
+        let handler = windows::Foundation::AsyncOperationCompletedHandler::new(move |_, _| {
+            let _ = tx.send(());
+            Ok(())
+        });
+        op.SetCompleted(&handler)?;
+        let _ = rx.recv_timeout(std::time::Duration::from_millis(800));
+        let res = op.GetResults()?;
+        Ok(res)
+    }
+
+    fn wait_props(
+        op: windows::Foundation::IAsyncOperation<GlobalSystemMediaTransportControlsSessionMediaProperties>,
+    ) -> Result<GlobalSystemMediaTransportControlsSessionMediaProperties, Box<dyn std::error::Error>> {
         let (tx, rx) = std::sync::mpsc::channel();
         let handler = windows::Foundation::AsyncOperationCompletedHandler::new(move |_, _| {
             let _ = tx.send(());
@@ -66,7 +81,7 @@ mod win_media {
 
     fn get_active_session() -> Result<Option<GlobalSystemMediaTransportControlsSession>, Box<dyn std::error::Error>> {
         let op = GlobalSystemMediaTransportControlsSessionManager::RequestAsync()?;
-        let manager = wait_op(op)?;
+        let manager = wait_manager(op)?;
         
         let mut playing_session: Option<GlobalSystemMediaTransportControlsSession> = None;
         let mut spotify_session: Option<GlobalSystemMediaTransportControlsSession> = None;
@@ -141,7 +156,7 @@ mod win_media {
         };
 
         let op = session.TryGetMediaPropertiesAsync()?;
-        let media_props = match wait_op(op) {
+        let media_props = match wait_props(op) {
             Ok(props) => props,
             Err(_) => return Ok(MediaSessionState::default()),
         };
