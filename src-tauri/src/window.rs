@@ -8,14 +8,13 @@ pub struct WindowDimensions {
     pub y: f64,
 }
 
-#[tauri::command]
-pub fn set_island_mode(
-    window: Window,
-    mode: String,
+pub fn apply_island_mode(
+    window: &Window,
+    mode: &str,
     custom_width: Option<f64>,
     custom_height: Option<f64>,
 ) -> Result<WindowDimensions, String> {
-    let (target_width, target_height) = match mode.as_str() {
+    let (target_width, target_height) = match mode {
         "compact" => (
             custom_width.unwrap_or(430.0),
             custom_height.unwrap_or(48.0),
@@ -69,6 +68,16 @@ pub fn set_island_mode(
         x: target_x,
         y: target_y,
     })
+}
+
+#[tauri::command]
+pub fn set_island_mode(
+    window: Window,
+    mode: String,
+    custom_width: Option<f64>,
+    custom_height: Option<f64>,
+) -> Result<WindowDimensions, String> {
+    apply_island_mode(&window, &mode, custom_width, custom_height)
 }
 
 #[tauri::command]

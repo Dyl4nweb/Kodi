@@ -5,7 +5,7 @@ pub mod system;
 pub mod window;
 
 use system::SystemState;
-use tauri::menu::{Menu, MenuItem};
+use tauri::menu::{MenuBuilder, MenuItemBuilder};
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
 use tauri::{Emitter, Manager};
 
@@ -37,23 +37,22 @@ pub fn run() {
             settings::save_settings,
         ])
         .setup(|app| {
-            // Create Tray Menu
-            let show_item = MenuItem::with_id(app, "toggle_show", "Show / Hide KODI (Ctrl+Alt+K)", true, None::<&str>)?;
-            let movie_item = MenuItem::with_id(app, "toggle_movie", "Movie Mode (Hide / Show)", true, None::<&str>)?;
-            let toggle_expand_item = MenuItem::with_id(app, "toggle_expand", "Expand / Collapse Notch", true, None::<&str>)?;
-            let refresh_quota_item = MenuItem::with_id(app, "refresh_quota", "Refresh Antigravity Quota", true, None::<&str>)?;
-            let quit_item = MenuItem::with_id(app, "quit", "Quit KODI", true, None::<&str>)?;
+            // Create Tray Menu Items (Tauri v2 Menu API)
+            let show_item = MenuItemBuilder::with_id("toggle_show", "Show / Hide KODI (Ctrl+Alt+K)").build(app)?;
+            let movie_item = MenuItemBuilder::with_id("toggle_movie", "Movie Mode (Hide / Show)").build(app)?;
+            let toggle_expand_item = MenuItemBuilder::with_id("toggle_expand", "Expand / Collapse Notch").build(app)?;
+            let refresh_quota_item = MenuItemBuilder::with_id("refresh_quota", "Refresh Antigravity Quota").build(app)?;
+            let quit_item = MenuItemBuilder::with_id("quit", "Quit KODI").build(app)?;
 
-            let tray_menu = Menu::with_items(
-                app,
-                &[&show_item, &movie_item, &toggle_expand_item, &refresh_quota_item, &quit_item],
-            )?;
+            let tray_menu = MenuBuilder::new(app)
+                .items(&[&show_item, &movie_item, &toggle_expand_item, &refresh_quota_item, &quit_item])
+                .build()?;
 
-            let _tray = TrayIconBuilder::new()
+            let mut tray_builder = TrayIconBuilder::new()
                 .menu(&tray_menu)
                 .show_menu_on_left_click(false)
                 .tooltip("KODI — Windows Dynamic Island")
-                .on_menu_event(|app, event| match event.id.as_ref() {
+                .on_menu_event(|app, event| match event.id().as_ref() {
                     "toggle_show" | "toggle_movie" => {
                         if let Some(w) = app.get_webview_window("main") {
                             if w.is_visible().unwrap_or(false) {
@@ -96,12 +95,17 @@ pub fn run() {
                             }
                         }
                     }
-                })
-                .build(app)?;
+                });
+
+            if let Some(icon) = app.default_window_icon() {
+                tray_builder = tray_builder.icon(icon.clone());
+            }
+
+            let _tray = tray_builder.build(app)?;
 
             // Initial positioning of the window at screen top center
             if let Some(w) = app.get_webview_window("main") {
-                let _ = window::set_island_mode((*w).clone(), "compact".to_string(), None, None);
+                let _ = window::apply_island_mode(w.as_ref(), "compact", None, None);
             }
 
             Ok(())
