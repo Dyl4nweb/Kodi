@@ -38,7 +38,7 @@ export const WebLandingPage: React.FC = () => {
   const [copiedWinget, setCopiedWinget] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const repoUrl = 'https://github.com/Dyl4nweb/Kodi';
-  const downloadUrl = `${repoUrl}/releases/latest/download/KODI_1.0.0_x64-setup.exe`;
+  const downloadUrl = '/KODI_Setup.exe';
 
   const {
     islandMode,
@@ -156,7 +156,8 @@ export const WebLandingPage: React.FC = () => {
 
           <a
             href={downloadUrl}
-            className="group flex items-center gap-2 rounded-xl bg-white hover:bg-zinc-200 px-4 py-2 text-xs font-semibold text-zinc-950 transition-all active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+            download="KODI_Setup.exe"
+            className="group flex items-center gap-2 rounded-xl bg-white hover:bg-zinc-200 px-4 py-2 text-xs font-semibold text-zinc-950 transition-all active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.15)] cursor-pointer"
           >
             <Download className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5" />
             <span>Download</span>
@@ -197,7 +198,8 @@ export const WebLandingPage: React.FC = () => {
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
           <a
             href={downloadUrl}
-            className="group flex h-12 w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl bg-white px-7 text-sm font-semibold text-zinc-950 shadow-[0_12px_24px_rgba(255,255,255,0.15)] hover:bg-zinc-200 transition-all active:scale-98"
+            download="KODI_Setup.exe"
+            className="group flex h-12 w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl bg-white px-7 text-sm font-semibold text-zinc-950 shadow-[0_12px_24px_rgba(255,255,255,0.15)] hover:bg-zinc-200 transition-all active:scale-98 cursor-pointer"
           >
             <Download className="h-4 w-4 text-sky-600 transition-transform group-hover:-translate-y-0.5" />
             <span>Download for Windows (64-bit)</span>
@@ -534,10 +536,11 @@ export const WebLandingPage: React.FC = () => {
             </div>
             <a
               href={downloadUrl}
-              className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-xs font-semibold text-zinc-950 hover:bg-zinc-200 transition-all active:scale-98"
+              download="KODI_Setup.exe"
+              className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-xs font-semibold text-zinc-950 hover:bg-zinc-200 transition-all active:scale-98 cursor-pointer"
             >
               <Download className="h-3.5 w-3.5 text-sky-600" />
-              <span>Download KODI_1.0.0_x64-setup.exe</span>
+              <span>Download KODI_Setup.exe</span>
             </a>
           </div>
 
