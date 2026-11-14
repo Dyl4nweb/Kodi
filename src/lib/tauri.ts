@@ -5,6 +5,26 @@ import {
   MediaSessionState,
   SystemStats,
 } from '@/types';
+import { webAudioSynth } from './webAudioSynth';
+
+const DEMO_PLAYLIST = [
+  {
+    title: 'Resonance',
+    artist: 'KODI Chillhop',
+    album: 'Lo-Fi Sessions Vol. 1',
+  },
+  {
+    title: 'Midnight Horizon',
+    artist: 'Synthwave Dreams',
+    album: 'Nightdrive FM',
+  },
+  {
+    title: 'Deep Focus & Code',
+    artist: 'Ambient Flow',
+    album: 'Developer Zen',
+  },
+];
+let currentTrackIdx = 0;
 
 // Safely check if Tauri environment is available
 export function isTauriEnvironment(): boolean {
@@ -118,11 +138,12 @@ export async function invokeCommand<T>(cmd: string, args: Record<string, any> = 
     }
 
     case 'get_media_state': {
+      const track = DEMO_PLAYLIST[currentTrackIdx];
       return {
         is_active: true,
-        title: 'Starboy',
-        artist: 'The Weeknd, Daft Punk',
-        album: 'Starboy',
+        title: track.title,
+        artist: track.artist,
+        album: track.album,
         app_name: 'Spotify',
         is_playing: mockPlaying,
         is_spotify: true,
@@ -139,12 +160,25 @@ export async function invokeCommand<T>(cmd: string, args: Record<string, any> = 
 
     case 'media_toggle_play_pause': {
       mockPlaying = !mockPlaying;
+      if (typeof window !== 'undefined') {
+        if (mockPlaying) {
+          webAudioSynth.start();
+        } else {
+          webAudioSynth.stop();
+        }
+      }
       return mockPlaying as T;
     }
 
-    case 'media_next_track':
-    case 'media_previous_track':
+    case 'media_next_track': {
+      currentTrackIdx = (currentTrackIdx + 1) % DEMO_PLAYLIST.length;
       return true as T;
+    }
+
+    case 'media_previous_track': {
+      currentTrackIdx = (currentTrackIdx - 1 + DEMO_PLAYLIST.length) % DEMO_PLAYLIST.length;
+      return true as T;
+    }
 
     case 'get_antigravity_quota': {
       const isSim = args.simulation_mode ?? mockSimulationMode;

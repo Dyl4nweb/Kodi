@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release Tag (e.g. v1.0.0)'
+        required: false
+        default: 'v1.0.0'
 
 jobs:
   build-tauri:
@@ -36,8 +41,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ github.ref_name }}
-          releaseName: 'KODI ${{ github.ref_name }}'
+          tagName: ${{ inputs.tag || github.ref_name }}
+          releaseName: 'KODI ${{ inputs.tag || github.ref_name }}'
           releaseBody: |
             ## KODI — Windows Dynamic Island Release
             
@@ -53,4 +58,14 @@ jobs:
             - 100% local, zero tracking, zero cloud telemetry
           releaseDraft: false
           prerelease: false
+
+      - name: Upload Windows Installer Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: KODI-Windows-Setup
+          path: |
+            src-tauri/target/release/bundle/nsis/*.exe
+            src-tauri/target/release/bundle/msi/*.msi
+          if-no-files-found: ignore
 

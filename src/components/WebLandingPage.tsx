@@ -415,8 +415,8 @@ export const WebLandingPage: React.FC = () => {
                 <Music className="h-4 w-4 text-emerald-400" />
               </div>
               <div className="overflow-hidden">
-                <div className="text-xs font-medium text-white truncate">Starboy</div>
-                <div className="text-[10px] text-zinc-500 truncate">The Weeknd · Daft Punk</div>
+                <div className="text-xs font-medium text-white truncate">Resonance</div>
+                <div className="text-[10px] text-zinc-500 truncate">KODI Chillhop · Lo-Fi Sessions</div>
               </div>
             </div>
           </div>
