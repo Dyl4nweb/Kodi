@@ -1,0 +1,55 @@
+name: Release & Build Windows Installer
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-tauri:
+    permissions:
+      contents: write
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js Static Export
+        run: npm run build
+
+      - name: Build Tauri Desktop App & Create GitHub Release
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'KODI ${{ github.ref_name }}'
+          releaseBody: |
+            ## KODI — Windows Dynamic Island Release
+            
+            ### Download & Install:
+            Download and run the installer below:
+            - **[KODI_1.0.0_x64-setup.exe](https://github.com/Dyl4nweb/Kodi/releases/latest/download/KODI_1.0.0_x64-setup.exe)**
+            
+            ### Features:
+            - Google Antigravity AI quota monitoring (Gemini, Claude, GPT)
+            - Spotify & Windows Media GSMTC integration
+            - Real-time CPU, RAM, & Battery power telemetry
+            - Movie Mode stealth hotkey (Ctrl + Alt + K)
+            - 100% local, zero tracking, zero cloud telemetry
+          releaseDraft: false
+          prerelease: false

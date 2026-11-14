@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+  }
+
+  * {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: transparent !important;
+    color: #f4f4f5;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Custom Sleek Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Equalizer Wave Animations */
+@keyframes music-bar-1 {
+  0%, 100% { height: 4px; }
+  50% { height: 12px; }
+}
+
+@keyframes music-bar-2 {
+  0%, 100% { height: 12px; }
+  50% { height: 6px; }
+}
+
+@keyframes music-bar-3 {
+  0%, 100% { height: 6px; }
+  50% { height: 14px; }
+}
+
