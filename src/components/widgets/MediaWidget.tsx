@@ -123,7 +123,7 @@ export const MediaWidget: React.FC<MediaWidgetProps> = ({
               <Disc3
                 className={`h-10 w-10 ${
                   isSpotify ? 'text-[#1DB954]' : 'text-sky-400'
-                } ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}
+                }`}
               />
             </div>
           )}
@@ -133,17 +133,17 @@ export const MediaWidget: React.FC<MediaWidgetProps> = ({
               <span
                 className={`h-2 w-0.5 rounded-full ${
                   isSpotify ? 'bg-[#1DB954]' : 'bg-sky-400'
-                } animate-pulse`}
+                }`}
               />
               <span
                 className={`h-3 w-0.5 rounded-full ${
                   isSpotify ? 'bg-[#1DB954]' : 'bg-sky-400'
-                } animate-pulse delay-75`}
+                }`}
               />
               <span
                 className={`h-1.5 w-0.5 rounded-full ${
                   isSpotify ? 'bg-[#1DB954]' : 'bg-sky-400'
-                } animate-pulse delay-150`}
+                }`}
               />
             </div>
           )}
@@ -170,7 +170,7 @@ export const MediaWidget: React.FC<MediaWidgetProps> = ({
                 Live Sound
               </span>
               <div className="flex items-center gap-0.5 ml-1">
-                <span className="h-1 w-1 rounded-full bg-[#1DB954] animate-ping" />
+                <span className="h-1 w-1 rounded-full bg-[#1DB954]" />
               </div>
             </div>
           )}

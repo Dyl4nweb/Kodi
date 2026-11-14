@@ -20,6 +20,7 @@ import {
   Github,
   Laptop,
   Layers,
+  Minimize2,
   Music,
   ShieldCheck,
   Sliders,
@@ -176,7 +177,7 @@ export const WebLandingPage: React.FC = () => {
 
         {/* Minimal pill tag */}
         <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1 text-xs text-zinc-300 backdrop-blur-md mb-6 shadow-sm">
-          <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse" />
+          <span className="h-1.5 w-1.5 rounded-full bg-sky-400" />
           <span className="font-medium">Native Windows Dynamic Island</span>
           <span className="text-zinc-600">·</span>
           <span className="text-zinc-400">Windows 10 & 11</span>
@@ -234,53 +235,58 @@ export const WebLandingPage: React.FC = () => {
           </span>
           <button
             onClick={() => setPresetMode('compact')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               !isMovieMode && islandMode === 'compact'
                 ? 'bg-white text-zinc-950 shadow-sm'
                 : 'bg-white/[0.04] text-zinc-400 hover:bg-white/[0.08] hover:text-white'
             }`}
           >
-            🫧 Compact Pill
+            <Minimize2 className="h-3.5 w-3.5" />
+            <span>Compact Pill</span>
           </button>
           <button
             onClick={() => setPresetMode('quota')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               !isMovieMode && islandMode === 'expanded' && activeTab === 'antigravity'
                 ? 'bg-sky-500 text-white shadow-sm'
                 : 'bg-white/[0.04] text-zinc-400 hover:bg-white/[0.08] hover:text-white'
             }`}
           >
-            ⚡ AI Quota
+            <BrainCircuit className="h-3.5 w-3.5" />
+            <span>AI Quota</span>
           </button>
           <button
             onClick={() => setPresetMode('music')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               !isMovieMode && islandMode === 'expanded' && activeTab === 'media'
                 ? 'bg-emerald-500 text-white shadow-sm'
                 : 'bg-white/[0.04] text-zinc-400 hover:bg-white/[0.08] hover:text-white'
             }`}
           >
-            🎵 Media
+            <Music className="h-3.5 w-3.5" />
+            <span>Media</span>
           </button>
           <button
             onClick={() => setPresetMode('system')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               !isMovieMode && islandMode === 'expanded' && activeTab === 'system'
                 ? 'bg-amber-500 text-white shadow-sm'
                 : 'bg-white/[0.04] text-zinc-400 hover:bg-white/[0.08] hover:text-white'
             }`}
           >
-            💻 Hardware
+            <Cpu className="h-3.5 w-3.5" />
+            <span>Hardware</span>
           </button>
           <button
             onClick={() => setPresetMode('movie')}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               isMovieMode
                 ? 'bg-rose-500 text-white shadow-sm'
                 : 'bg-white/[0.04] text-zinc-400 hover:bg-white/[0.08] hover:text-white'
             }`}
           >
-            🎬 Movie Mode
+            <Film className="h-3.5 w-3.5" />
+            <span>Movie Mode</span>
           </button>
         </div>
 
@@ -405,8 +411,8 @@ export const WebLandingPage: React.FC = () => {
             </div>
 
             <div className="mt-6 flex items-center gap-3 rounded-xl border border-white/[0.06] bg-black/60 p-3">
-              <div className="h-9 w-9 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xs">
-                ♫
+              <div className="h-9 w-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <Music className="h-4 w-4 text-emerald-400" />
               </div>
               <div className="overflow-hidden">
                 <div className="text-xs font-medium text-white truncate">Starboy</div>

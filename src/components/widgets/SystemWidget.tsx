@@ -98,7 +98,7 @@ export const SystemWidget: React.FC<SystemWidgetProps> = ({ stats }) => {
             <span className="text-xs font-medium">Power</span>
             {stats.battery_charging ? (
               <div className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] text-emerald-400 font-medium">
-                <Zap className="h-3 w-3 fill-emerald-400 animate-pulse" />
+                <Zap className="h-3 w-3 fill-emerald-400" />
                 <span>Charging</span>
               </div>
             ) : stats.battery_percent !== null ? (
@@ -188,7 +188,7 @@ export const SystemWidget: React.FC<SystemWidgetProps> = ({ stats }) => {
             >
               <span
                 className={`h-1.5 w-1.5 rounded-full ${
-                  stats.is_online ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'
+                  stats.is_online ? 'bg-emerald-400' : 'bg-rose-400'
                 }`}
               />
               <span>{stats.is_online ? 'Online' : 'Offline'}</span>

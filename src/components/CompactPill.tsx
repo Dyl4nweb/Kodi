@@ -8,6 +8,7 @@ import {
   Cpu,
   EyeOff,
   Flame,
+  Pause,
   Plug,
   Radio,
   Sparkles,
@@ -153,7 +154,7 @@ export const CompactPill: React.FC<CompactPillProps> = ({
           </div>
         ) : mediaState?.is_active && mediaState.title ? (
           <div className="flex items-center gap-1.5 truncate">
-            <span className="text-[10px] text-zinc-500 font-mono">⏸</span>
+            <Pause className="h-2.5 w-2.5 text-zinc-500 flex-shrink-0" />
             <span className="truncate text-xs font-medium text-zinc-300">
               {mediaState.title}
             </span>
@@ -188,7 +189,7 @@ export const CompactPill: React.FC<CompactPillProps> = ({
           title={
             isBatteryActive
               ? `Battery: ${hasBattery ? `${batteryPct}%` : 'AC Power'} ${
-                  isCharging ? '(Charging ⚡)' : isAcOnline ? '(Plugged In)' : '(On Battery)'
+                  isCharging ? '(Charging)' : isAcOnline ? '(Plugged In)' : '(On Battery)'
                 } · Click to switch to Quota`
               : `Antigravity Quota: ${lowestRemaining}% remaining · Click to switch to Battery`
           }
@@ -206,7 +207,7 @@ export const CompactPill: React.FC<CompactPillProps> = ({
             innerContent={
               isBatteryActive ? (
                 isCharging ? (
-                  <div className="flex h-3 w-3 items-center justify-center rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.9)] animate-pulse">
+                  <div className="flex h-3 w-3 items-center justify-center rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.7)]">
                     <Zap className="h-2 w-2 text-white fill-white" />
                   </div>
                 ) : hasBattery ? (
