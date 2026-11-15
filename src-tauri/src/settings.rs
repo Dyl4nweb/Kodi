@@ -49,7 +49,7 @@ impl Default for KodiSettings {
             animation_speed: "normal".to_string(),
             antigravity_enabled: true,
             antigravity_refresh_interval_secs: 60,
-            antigravity_simulation_mode: true, // Default to true so user immediately sees live quotas upon install!
+            antigravity_simulation_mode: false, // Default to real Antigravity connection!
             warning_threshold_70: true,
             warning_threshold_85: true,
             warning_threshold_95: true,

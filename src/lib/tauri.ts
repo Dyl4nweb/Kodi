@@ -88,7 +88,7 @@ const fallbackSettings: KodiSettings = {
   animation_speed: 'normal',
   antigravity_enabled: true,
   antigravity_refresh_interval_secs: 60,
-  antigravity_simulation_mode: true,
+  antigravity_simulation_mode: false,
   warning_threshold_70: true,
   warning_threshold_85: true,
   warning_threshold_95: true,

@@ -91,7 +91,7 @@ export function useKodiState() {
   const refreshQuota = async () => {
     setIsRefreshingQuota(true);
     try {
-      const isSim = settings?.antigravity_simulation_mode ?? true;
+      const isSim = settings?.antigravity_simulation_mode ?? false;
       const status = await invokeCommand<AntigravityStatus>('get_antigravity_quota', {
         simulation_mode: isSim,
       });

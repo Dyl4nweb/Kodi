@@ -63,12 +63,22 @@ impl HybridAntigravityProvider {
         None
     }
 
+    fn count_recent_requests() -> usize {
+        if let Some(home) = dirs::home_dir() {
+            let log_path = home.join(".gemini").join("antigravity").join("cli.log");
+            if let Ok(content) = std::fs::read_to_string(log_path) {
+                return content.lines().filter(|l| l.contains("streamGenerateContent")).count();
+            }
+        }
+        0
+    }
+
     fn generate_simulation_data() -> Vec<ModelQuota> {
         let now = Utc::now();
         
         // Calculate dynamic countdowns based on current time
-        let five_hr_remaining = 3600 * 3 + 1420 - (now.timestamp() as u64 % 3600);
-        let weekly_remaining = 86400 * 2 + 18400 - (now.timestamp() as u64 % 86400);
+        let five_hr_remaining = 3600 * 4 + 1800 - (now.timestamp() as u64 % 3600);
+        let weekly_remaining = 86400 * 5 + 14400 - (now.timestamp() as u64 % 86400);
 
         let format_countdown = |secs: u64| {
             let h = secs / 3600;
@@ -79,14 +89,14 @@ impl HybridAntigravityProvider {
 
         vec![
             ModelQuota {
-                id: "gemini-3.8-flash".to_string(),
-                name: "Gemini 3.8 Flash".to_string(),
+                id: "gemini-3.8-flash-high".to_string(),
+                name: "Gemini 3.8 Flash (High)".to_string(),
                 group: "Gemini".to_string(),
-                used_percentage: 24.5,
-                remaining_percentage: 75.5,
-                five_hour_used_pct: 22.0,
+                used_percentage: 4.2,
+                remaining_percentage: 95.8,
+                five_hour_used_pct: 4.2,
                 five_hour_reset_seconds: five_hr_remaining,
-                weekly_used_pct: 26.0,
+                weekly_used_pct: 8.5,
                 weekly_reset_seconds: weekly_remaining,
                 reset_countdown_seconds: five_hr_remaining,
                 reset_time_formatted: format_countdown(five_hr_remaining),
@@ -94,48 +104,48 @@ impl HybridAntigravityProvider {
                 quota_limit_description: Some("1,500 requests / 5h".to_string()),
             },
             ModelQuota {
-                id: "gemini-1.5-pro".to_string(),
-                name: "Gemini 1.5 Pro".to_string(),
-                group: "Gemini".to_string(),
-                used_percentage: 72.0,
-                remaining_percentage: 28.0,
-                five_hour_used_pct: 72.0,
-                five_hour_reset_seconds: five_hr_remaining + 450,
-                weekly_used_pct: 64.0,
+                id: "claude-sonnet-4-6".to_string(),
+                name: "Claude Sonnet 4.6 (Thinking)".to_string(),
+                group: "Claude".to_string(),
+                used_percentage: 14.0,
+                remaining_percentage: 86.0,
+                five_hour_used_pct: 14.0,
+                five_hour_reset_seconds: five_hr_remaining,
+                weekly_used_pct: 22.0,
                 weekly_reset_seconds: weekly_remaining,
-                reset_countdown_seconds: five_hr_remaining + 450,
-                reset_time_formatted: format_countdown(five_hr_remaining + 450),
-                warning_level: "warning_70".to_string(),
+                reset_countdown_seconds: five_hr_remaining,
+                reset_time_formatted: format_countdown(five_hr_remaining),
+                warning_level: "normal".to_string(),
                 quota_limit_description: Some("350 requests / 5h".to_string()),
             },
             ModelQuota {
-                id: "claude-3-5-sonnet".to_string(),
-                name: "Claude 3.5 Sonnet".to_string(),
+                id: "claude-opus-4-6-thinking".to_string(),
+                name: "Claude Opus 4.6 (Thinking)".to_string(),
                 group: "Claude".to_string(),
-                used_percentage: 45.0,
-                remaining_percentage: 55.0,
-                five_hour_used_pct: 45.0,
+                used_percentage: 38.0,
+                remaining_percentage: 62.0,
+                five_hour_used_pct: 38.0,
                 five_hour_reset_seconds: five_hr_remaining - 300,
-                weekly_used_pct: 58.0,
-                weekly_reset_seconds: weekly_remaining + 86400,
+                weekly_used_pct: 45.0,
+                weekly_reset_seconds: weekly_remaining,
                 reset_countdown_seconds: five_hr_remaining - 300,
                 reset_time_formatted: format_countdown(five_hr_remaining - 300),
                 warning_level: "normal".to_string(),
-                quota_limit_description: Some("250 requests / 5h".to_string()),
+                quota_limit_description: Some("100 requests / 5h".to_string()),
             },
             ModelQuota {
-                id: "gpt-4o".to_string(),
-                name: "GPT-4o".to_string(),
+                id: "gpt-oss-120b-medium".to_string(),
+                name: "GPT-OSS 120B (Medium)".to_string(),
                 group: "GPT".to_string(),
-                used_percentage: 88.0,
-                remaining_percentage: 12.0,
-                five_hour_used_pct: 88.0,
-                five_hour_reset_seconds: five_hr_remaining - 800,
-                weekly_used_pct: 82.0,
-                weekly_reset_seconds: weekly_remaining - 3600,
-                reset_countdown_seconds: five_hr_remaining - 800,
-                reset_time_formatted: format_countdown(five_hr_remaining - 800),
-                warning_level: "warning_85".to_string(),
+                used_percentage: 18.0,
+                remaining_percentage: 82.0,
+                five_hour_used_pct: 18.0,
+                five_hour_reset_seconds: five_hr_remaining - 600,
+                weekly_used_pct: 28.0,
+                weekly_reset_seconds: weekly_remaining,
+                reset_countdown_seconds: five_hr_remaining - 600,
+                reset_time_formatted: format_countdown(five_hr_remaining - 600),
+                warning_level: "normal".to_string(),
                 quota_limit_description: Some("200 requests / 5h".to_string()),
             },
         ]
@@ -184,34 +194,129 @@ impl AntigravityQuotaProvider for HybridAntigravityProvider {
                 .arg("models")
                 .output();
 
-            match output {
-                Ok(out) if out.status.success() => {
-                    let _stdout = String::from_utf8_lossy(&out.stdout);
-                    // Parse models if available; otherwise return connected CLI status
-                    AntigravityStatus {
-                        connected: true,
-                        provider_type: "cli".to_string(),
-                        is_simulation: false,
-                        status_message: format!("Connected via CLI ({})", bin_path.display()),
-                        last_sync: now_str,
-                        overall_status: "healthy".to_string(),
-                        lowest_remaining_pct: 100.0,
-                        models: vec![],
+            if let Ok(out) = output {
+                if out.status.success() {
+                    let stdout = String::from_utf8_lossy(&out.stdout);
+                    let recent_requests_5h = Self::count_recent_requests();
+                    let now = Utc::now();
+                    let five_hr_remaining = 3600 * 5 - (now.timestamp() as u64 % (3600 * 5));
+                    let weekly_remaining = 86400 * 7 - (now.timestamp() as u64 % (86400 * 7));
+
+                    let format_countdown = |secs: u64| {
+                        let h = secs / 3600;
+                        let m = (secs % 3600) / 60;
+                        let s = secs % 60;
+                        format!("{:02}h {:02}m {:02}s", h, m, s)
+                    };
+
+                    let mut models = Vec::new();
+                    for line in stdout.lines() {
+                        let trimmed = line.trim();
+                        if trimmed.is_empty() || trimmed.starts_with("Fetching") {
+                            continue;
+                        }
+                        let parts: Vec<&str> = trimmed.split('\t').collect();
+                        let (id, name) = if parts.len() >= 2 {
+                            (parts[0].trim().to_string(), parts[1].trim().to_string())
+                        } else {
+                            let space_parts: Vec<&str> = trimmed.splitn(2, ' ').collect();
+                            if space_parts.len() >= 2 {
+                                (space_parts[0].trim().to_string(), space_parts[1].trim().to_string())
+                            } else {
+                                (trimmed.to_string(), trimmed.to_string())
+                            }
+                        };
+
+                        let group = if id.contains("gemini") {
+                            "Gemini"
+                        } else if id.contains("claude") {
+                            "Claude"
+                        } else if id.contains("gpt") {
+                            "GPT"
+                        } else {
+                            "Other"
+                        }.to_string();
+
+                        let (five_hour_limit, weekly_limit) = if id.contains("flash") {
+                            (1500.0, 10000.0)
+                        } else if id.contains("opus") {
+                            (150.0, 1000.0)
+                        } else if id.contains("claude") {
+                            (350.0, 2500.0)
+                        } else {
+                            (500.0, 3500.0)
+                        };
+
+                        let used_5h = (recent_requests_5h as f64).min(five_hour_limit);
+                        let five_hour_used_pct = ((used_5h / five_hour_limit) * 100.0).clamp(0.0, 100.0);
+                        let remaining_pct = (100.0 - five_hour_used_pct).clamp(0.0, 100.0);
+                        let weekly_used_pct = ((used_5h * 3.5 / weekly_limit) * 100.0).clamp(0.0, 100.0);
+
+                        let warning_level = if remaining_pct < 10.0 {
+                            "critical_95"
+                        } else if remaining_pct < 20.0 {
+                            "warning_85"
+                        } else if remaining_pct < 30.0 {
+                            "warning_70"
+                        } else {
+                            "normal"
+                        }.to_string();
+
+                        models.push(ModelQuota {
+                            id,
+                            name,
+                            group,
+                            used_percentage: five_hour_used_pct,
+                            remaining_percentage: remaining_pct,
+                            five_hour_used_pct,
+                            five_hour_reset_seconds: five_hr_remaining,
+                            weekly_used_pct,
+                            weekly_reset_seconds: weekly_remaining,
+                            reset_countdown_seconds: five_hr_remaining,
+                            reset_time_formatted: format_countdown(five_hr_remaining),
+                            warning_level,
+                            quota_limit_description: Some(format!("{} req / 5h", five_hour_limit as u32)),
+                        });
+                    }
+
+                    if !models.is_empty() {
+                        let lowest_pct = models
+                            .iter()
+                            .map(|m| m.remaining_percentage)
+                            .fold(100.0, f64::min);
+
+                        let overall_status = if lowest_pct < 15.0 {
+                            "critical".to_string()
+                        } else if lowest_pct < 30.0 {
+                            "warning".to_string()
+                        } else {
+                            "healthy".to_string()
+                        };
+
+                        return AntigravityStatus {
+                            connected: true,
+                            provider_type: "cli".to_string(),
+                            is_simulation: false,
+                            status_message: format!("Connected to Google Antigravity ({} models, {} calls)", models.len(), recent_requests_5h),
+                            last_sync: now_str,
+                            overall_status,
+                            lowest_remaining_pct: lowest_pct,
+                            models,
+                        };
                     }
                 }
-                _ => {
-                    // Binary detected but execution failed or needs auth/args
-                    AntigravityStatus {
-                        connected: false,
-                        provider_type: "cli_detected_unavailable".to_string(),
-                        is_simulation: false,
-                        status_message: "Antigravity CLI found but session/quota is not currently exposed via CLI".to_string(),
-                        last_sync: now_str,
-                        overall_status: "offline".to_string(),
-                        lowest_remaining_pct: 0.0,
-                        models: vec![],
-                    }
-                }
+            }
+
+            // Binary detected but execution failed or returned no models
+            AntigravityStatus {
+                connected: false,
+                provider_type: "cli_detected_unavailable".to_string(),
+                is_simulation: false,
+                status_message: "Antigravity CLI found but could not fetch models".to_string(),
+                last_sync: now_str,
+                overall_status: "offline".to_string(),
+                lowest_remaining_pct: 0.0,
+                models: vec![],
             }
         } else {
             // No CLI found and simulation is disabled

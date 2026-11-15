@@ -11,7 +11,6 @@ import {
   Pause,
   Plug,
   Radio,
-  Sparkles,
   Terminal,
   Zap,
 } from 'lucide-react';
@@ -42,7 +41,11 @@ export const CompactPill: React.FC<CompactPillProps> = ({
 
   // Quota & window calculations from Antigravity
   const activeModel = antigravityStatus?.models?.[0];
-  const weeklyUsed = activeModel ? Math.round(activeModel.weekly_used_pct) : 61;
+  const quotaRemaining = activeModel
+    ? Math.round(activeModel.remaining_percentage)
+    : antigravityStatus?.lowest_remaining_pct
+    ? Math.round(antigravityStatus.lowest_remaining_pct)
+    : 92;
   const lowestRemaining = antigravityStatus
     ? Math.round(antigravityStatus.lowest_remaining_pct)
     : 12;
@@ -77,52 +80,33 @@ export const CompactPill: React.FC<CompactPillProps> = ({
     <motion.div
       layoutId="kodi-notch-container"
       onClick={onExpand}
-      className="group relative flex h-[38px] w-[400px] cursor-pointer items-center justify-between rounded-b-[20px] bg-[#000000] px-4 py-1 shadow-[0_12px_36px_rgba(0,0,0,0.95)] border-b border-x border-white/[0.08] transition-all duration-300 select-none hover:shadow-[0_14px_40px_rgba(56,189,248,0.22)] transform-gpu will-change-transform"
+      className="group relative flex h-[38px] w-[392px] cursor-pointer items-center justify-between rounded-[19px] bg-black/95 px-3.5 py-1 shadow-[0_10px_32px_rgba(0,0,0,0.95)] border border-white/[0.12] transition-all duration-300 select-none hover:border-white/[0.22] hover:shadow-[0_12px_36px_rgba(0,0,0,0.98)] transform-gpu will-change-transform"
       whileHover={{ y: 1.5, scale: 1.002 }}
       whileTap={{ scale: 0.985 }}
       transition={{ type: 'spring', stiffness: 420, damping: 30, mass: 0.8 }}
     >
-      {/* Concave Notch Ears Flaring to the Top Screen Edge */}
-      {/* Top Left Ear Scoop */}
-      <svg
-        className="pointer-events-none absolute -left-[14px] top-0 h-[14px] w-[14px]"
-        viewBox="0 0 14 14"
-        fill="none"
-      >
-        <path d="M0 0 H14 V14 C14 6.27 7.73 0 0 0 Z" fill="#000000" />
-      </svg>
-
-      {/* Top Right Ear Scoop */}
-      <svg
-        className="pointer-events-none absolute -right-[14px] top-0 h-[14px] w-[14px]"
-        viewBox="0 0 14 14"
-        fill="none"
-      >
-        <path d="M14 0 H0 V14 C0 6.27 6.27 0 14 0 Z" fill="#000000" />
-      </svg>
-
-      {/* Subtle bottom rim specular edge */}
-      <div className="pointer-events-none absolute inset-x-3 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      {/* Subtle top rim specular edge */}
+      <div className="pointer-events-none absolute inset-x-6 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
       {/* LEFT: Circular Progress Ring with Google Antigravity Logo & Percentage */}
       <div
         className="flex items-center gap-2 group/left"
-        title={`Antigravity Quota: ${weeklyUsed}% used this week`}
+        title={`Google Antigravity: ${activeModel?.name || 'Active'}: ${quotaRemaining}% quota remaining`}
       >
         <CircularProgress
-          percentage={weeklyUsed}
+          percentage={quotaRemaining}
           size={25}
           strokeWidth={2.2}
           strokeColor="#0084ff"
           trackColor="rgba(255, 255, 255, 0.14)"
           innerContent={
-            <div className="flex items-center justify-center p-0.5 transition-transform duration-300 group-hover/left:scale-115">
-              <AntigravityLogo size={14} glow />
+            <div className="flex items-center justify-center p-0.5 transition-transform duration-300 group-hover/left:scale-110">
+              <AntigravityLogo size={14} />
             </div>
           }
         />
         <span className="font-mono text-xs font-semibold text-zinc-100 tracking-tight">
-          {weeklyUsed}%
+          {quotaRemaining}%
         </span>
       </div>
 
@@ -207,22 +191,22 @@ export const CompactPill: React.FC<CompactPillProps> = ({
             innerContent={
               isBatteryActive ? (
                 isCharging ? (
-                  <div className="flex h-3 w-3 items-center justify-center rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.7)]">
-                    <Zap className="h-2 w-2 text-white fill-white" />
-                  </div>
+                  <Zap className="h-2.5 w-2.5 text-emerald-400 fill-emerald-400" />
                 ) : hasBattery ? (
-                  <div className="flex h-3 w-3 items-center justify-center rounded-full bg-[#5b5fff] shadow-[0_0_6px_rgba(91,95,255,0.7)]">
-                    <Sparkles className="h-2 w-2 text-white" />
-                  </div>
+                  <Zap
+                    className={`h-2.5 w-2.5 ${
+                      batteryPct > 50
+                        ? 'text-emerald-400 fill-emerald-400'
+                        : batteryPct > 20
+                        ? 'text-amber-400 fill-amber-400'
+                        : 'text-rose-400 fill-rose-400'
+                    }`}
+                  />
                 ) : (
-                  <div className="flex h-3 w-3 items-center justify-center rounded-full bg-sky-500 shadow-[0_0_6px_rgba(56,189,248,0.7)]">
-                    <Plug className="h-2 w-2 text-white" />
-                  </div>
+                  <Plug className="h-2.5 w-2.5 text-sky-400" />
                 )
               ) : (
-                <div className="flex h-3 w-3 items-center justify-center rounded-full bg-[#5b5fff] shadow-[0_0_6px_rgba(91,95,255,0.7)]">
-                  <Sparkles className="h-2 w-2 text-white" />
-                </div>
+                <Zap className="h-2.5 w-2.5 text-sky-400 fill-sky-400" />
               )
             }
           />

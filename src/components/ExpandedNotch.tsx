@@ -9,7 +9,6 @@ import {
   Grid,
   Music,
   Settings as SettingsIcon,
-  Sparkles,
 } from 'lucide-react';
 import {
   ActiveTab,
@@ -63,35 +62,17 @@ export const ExpandedNotch: React.FC<ExpandedNotchProps> = ({
   return (
     <motion.div
       layoutId="kodi-notch-container"
-      className="relative flex h-[495px] w-[500px] flex-col rounded-b-[30px] border-b border-x border-white/[0.08] bg-[#000000] shadow-[0_24px_60px_rgba(0,0,0,0.95)] backdrop-blur-3xl select-none transform-gpu will-change-transform"
+      className="relative flex h-[495px] w-[500px] flex-col rounded-[26px] border border-white/[0.12] bg-[#000000]/95 shadow-[0_24px_60px_rgba(0,0,0,0.98)] backdrop-blur-3xl select-none transform-gpu will-change-transform"
       initial={{ scale: 0.98, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.98, opacity: 0 }}
       transition={{ type: 'spring', stiffness: 420, damping: 32, mass: 0.85 }}
     >
-      {/* Top Left Concave Notch Ear - Fully visible without overflow clipping */}
-      <svg
-        className="pointer-events-none absolute -left-[14px] top-0 h-[14px] w-[14px]"
-        viewBox="0 0 14 14"
-        fill="none"
-      >
-        <path d="M0 0 H14 V14 C14 6.27 7.73 0 0 0 Z" fill="#000000" />
-      </svg>
-
-      {/* Top Right Concave Notch Ear - Fully visible without overflow clipping */}
-      <svg
-        className="pointer-events-none absolute -right-[14px] top-0 h-[14px] w-[14px]"
-        viewBox="0 0 14 14"
-        fill="none"
-      >
-        <path d="M14 0 H0 V14 C0 6.27 6.27 0 14 0 Z" fill="#000000" />
-      </svg>
-
       {/* Top subtle specular highlight */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent" />
 
       {/* Inner Container with overflow-hidden & rounded-b to smoothly clip scroll contents */}
-      <div className="flex h-full w-full flex-col overflow-hidden rounded-b-[30px]">
+      <div className="flex h-full w-full flex-col overflow-hidden rounded-[26px]">
         {/* Top Navigation & Controls Bar */}
         <div className="flex items-center justify-between border-b border-white/[0.08] bg-white/[0.02] px-4 py-2 flex-shrink-0">
           {/* Left: Brand Identity with Click-to-Collapse */}

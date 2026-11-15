@@ -10,7 +10,6 @@ import {
   Flame,
   Info,
   RefreshCw,
-  Sparkles,
   Zap,
 } from 'lucide-react';
 import { AntigravityStatus, ModelQuota } from '@/types';
