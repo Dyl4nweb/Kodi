@@ -101,7 +101,10 @@ pub fn run() {
                 tray_builder = tray_builder.icon(icon.clone());
             }
 
-            let _tray = tray_builder.build(app)?;
+            // Safely attempt to initialize system tray without panicking or failing app setup
+            if let Err(e) = tray_builder.build(app) {
+                eprintln!("[KODI] System tray initialization skipped or failed: {}", e);
+            }
 
             // Initial positioning of the window at screen top center
             if let Some(w) = app.get_webview_window("main") {

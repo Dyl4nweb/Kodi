@@ -55,10 +55,5 @@
         "displayLanguageSelector": false
       }
     }
-  },
-  "plugins": {
-    "autostart": {},
-    "notification": {},
-    "shell": {}
   }
 }
