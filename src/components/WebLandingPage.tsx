@@ -19,12 +19,17 @@ import {
   Film,
   Laptop,
   Layers,
+  Loader2,
+  Lock,
   Minimize2,
   Music,
+  QrCode,
   ShieldCheck,
   Sliders,
+  Smartphone,
   Sparkles,
   Terminal,
+  X,
   Zap,
 } from 'lucide-react';
 import { KodiLogo } from './KodiLogo';
@@ -35,7 +40,38 @@ import { useKodiState } from '@/hooks/useKodiState';
 
 export const WebLandingPage: React.FC = () => {
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentStep, setPaymentStep] = useState<'scan' | 'verifying' | 'unlocked'>('scan');
+  const [refNumber, setRefNumber] = useState('');
+  const [validationError, setValidationError] = useState('');
   const downloadUrl = '/KODI_Setup.exe';
+
+  const openPaymentModal = () => {
+    setShowPaymentModal(true);
+    setPaymentStep('scan');
+    setValidationError('');
+  };
+
+  const handleConfirmPayment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!refNumber.trim()) {
+      setValidationError('Please enter your payment reference number or sender name.');
+      return;
+    }
+    setValidationError('');
+    setPaymentStep('verifying');
+    setTimeout(() => {
+      setPaymentStep('unlocked');
+      if (typeof window !== 'undefined') {
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = 'KODI_Setup.exe';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }, 1500);
+  };
 
   const {
     islandMode,
@@ -130,21 +166,20 @@ export const WebLandingPage: React.FC = () => {
         </nav>
 
         <div className="flex items-center gap-3">
-          <a
-            href="#pricing"
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs text-emerald-400 font-semibold px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 transition-all"
+          <button
+            onClick={openPaymentModal}
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs text-emerald-400 font-semibold px-3 py-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 transition-all cursor-pointer"
           >
             <span>$2.99 (~₱150)</span>
-          </a>
+          </button>
 
-          <a
-            href={downloadUrl}
-            download="KODI_Setup.exe"
+          <button
+            onClick={openPaymentModal}
             className="group flex items-center gap-2 rounded-xl bg-white hover:bg-zinc-200 px-4 py-2 text-xs font-semibold text-zinc-950 transition-all active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.15)] cursor-pointer"
           >
-            <Download className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5" />
-            <span>Download KODI</span>
-          </a>
+            <QrCode className="h-3.5 w-3.5 text-emerald-600" />
+            <span>Get KODI Pro</span>
+          </button>
         </div>
       </header>
 
@@ -179,14 +214,13 @@ export const WebLandingPage: React.FC = () => {
 
         {/* Primary Download action */}
         <div className="mt-8 flex items-center justify-center">
-          <a
-            href={downloadUrl}
-            download="KODI_Setup.exe"
+          <button
+            onClick={openPaymentModal}
             className="group flex h-12 items-center justify-center gap-2.5 rounded-xl bg-white px-8 text-sm font-semibold text-zinc-950 shadow-[0_12px_24px_rgba(255,255,255,0.15)] hover:bg-zinc-200 transition-all active:scale-98 cursor-pointer"
           >
-            <Download className="h-4 w-4 text-emerald-600 transition-transform group-hover:-translate-y-0.5" />
-            <span>Download KODI Pro · $2.99 (~₱150)</span>
-          </a>
+            <QrCode className="h-4 w-4 text-emerald-600 transition-transform group-hover:scale-110" />
+            <span>Get KODI Pro · $2.99 (~₱150)</span>
+          </button>
         </div>
 
         <div className="mt-4 flex items-center justify-center gap-4 text-[11px] text-zinc-500 font-mono">
@@ -508,14 +542,34 @@ export const WebLandingPage: React.FC = () => {
             </div>
           </div>
 
-          <a
-            href={downloadUrl}
-            download="KODI_Setup.exe"
+          {/* Quick QR Scan Preview */}
+          <div className="mb-6 flex items-center gap-4 rounded-2xl border border-white/10 bg-black/40 p-4">
+            <img
+              src="/instapay-qr.jpg"
+              alt="InstaPay QR Code for KODI Pro License"
+              className="h-20 w-20 rounded-xl bg-white p-1 object-contain flex-shrink-0 cursor-pointer hover:scale-105 transition-transform"
+              onClick={openPaymentModal}
+            />
+            <div className="text-left">
+              <div className="text-xs font-semibold text-white">Scan to Pay via InstaPay / QRPH</div>
+              <div className="text-[11px] text-zinc-400 mt-0.5">Compatible with GCash, Maya, BDO, BPI & all Philippine bank apps.</div>
+              <button
+                type="button"
+                onClick={openPaymentModal}
+                className="mt-1.5 text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 underline cursor-pointer"
+              >
+                Click to expand QR Code & instructions →
+              </button>
+            </div>
+          </div>
+
+          <button
+            onClick={openPaymentModal}
             className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-sm shadow-[0_10px_25px_rgba(255,255,255,0.2)] transition-all active:scale-98 cursor-pointer"
           >
-            <Download className="h-4 w-4 text-emerald-600" />
-            <span>Download KODI Pro — $2.99 (~₱150)</span>
-          </a>
+            <QrCode className="h-4 w-4 text-emerald-600" />
+            <span>Pay ₱150 ($2.99) & Unlock KODI Pro</span>
+          </button>
         </div>
       </section>
 
@@ -570,14 +624,13 @@ export const WebLandingPage: React.FC = () => {
           <p className="text-xs text-zinc-400 mt-2 max-w-sm leading-relaxed">
             Download the official setup and run it. Automatically sets up your start menu shortcut and discreet system tray background icon.
           </p>
-          <a
-            href={downloadUrl}
-            download="KODI_Setup.exe"
+          <button
+            onClick={openPaymentModal}
             className="mt-6 flex items-center justify-center gap-2.5 rounded-xl bg-white px-8 py-3 text-xs font-bold text-zinc-950 hover:bg-zinc-200 transition-all active:scale-98 cursor-pointer shadow-lg shadow-white/10"
           >
-            <Download className="h-4 w-4 text-emerald-600" />
-            <span>Download KODI_Setup.exe (64-bit)</span>
-          </a>
+            <QrCode className="h-4 w-4 text-emerald-600" />
+            <span>Pay ₱150 & Download Installer (.exe)</span>
+          </button>
           <span className="mt-3 text-[11px] font-mono text-zinc-500">
             Version 1.1.1 · Windows 10 & 11 compatible · Offline
           </span>
@@ -620,11 +673,187 @@ export const WebLandingPage: React.FC = () => {
             exit={{ opacity: 0, scale: 0.8, y: 10 }}
             onClick={scrollToTop}
             title="Back to Top"
-            className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full border border-white/15 bg-black/80 backdrop-blur-md px-4 py-2.5 text-xs font-medium text-zinc-300 shadow-[0_10px_30px_rgba(0,0,0,0.8)] hover:border-white/30 hover:bg-black/95 hover:text-white transition-all active:scale-95 cursor-pointer"
+            className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full border border-white/15 bg-black/80 backdrop-blur-md px-4 py-2.5 text-xs font-medium text-zinc-300 shadow-[0_10px_30px_rgba(0,0,0,0.8)] hover:border-white/30 hover:bg-black/95 hover:text-white transition-all active:scale-95 cursor-pointer"
           >
             <ChevronUp className="h-4 w-4 text-zinc-400" />
             <span>Back to top</span>
           </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Payment & Instant Activation Modal */}
+      <AnimatePresence>
+        {showPaymentModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.2 }}
+              className="relative w-full max-w-md rounded-3xl border border-white/10 bg-[#0c0d12] p-6 shadow-2xl text-left select-text max-h-[90vh] overflow-y-auto custom-scrollbar"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowPaymentModal(false)}
+                className="absolute top-5 right-5 flex h-8 w-8 items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                title="Close"
+              >
+                <X className="h-4 w-4" />
+              </button>
+
+              {paymentStep === 'scan' && (
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full font-semibold">
+                      Lifetime License
+                    </span>
+                    <span className="text-xs text-zinc-400">One-Time Payment</span>
+                  </div>
+
+                  <h3 className="text-xl font-bold text-white">
+                    Unlock KODI Pro
+                  </h3>
+                  <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+                    Scan with any Philippine e-wallet or mobile banking app to pay <strong>₱150 PHP ($2.99 USD)</strong> and download immediately.
+                  </p>
+
+                  {/* QR Code Container */}
+                  <div className="mt-4 flex flex-col items-center justify-center rounded-2xl bg-white p-4 shadow-md">
+                    <img
+                      src="/instapay-qr.jpg"
+                      alt="InstaPay QR Code for KODI Pro License"
+                      className="h-56 w-56 object-contain rounded-lg"
+                    />
+                    <div className="mt-2 flex items-center gap-1.5 text-[11px] font-semibold text-zinc-800">
+                      <Smartphone className="h-3.5 w-3.5 text-blue-600" />
+                      <span>Scan via InstaPay / QRPH</span>
+                    </div>
+                    <span className="text-[10px] text-zinc-500 font-mono">
+                      Works with GCash · Maya · BDO · BPI · UnionBank & All Banks
+                    </span>
+                  </div>
+
+                  {/* Payment Instructions */}
+                  <div className="mt-4 rounded-xl border border-white/5 bg-black/40 p-3 text-[11px] text-zinc-300 space-y-1.5">
+                    <div className="flex items-start gap-2">
+                      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 font-mono text-[10px] flex-shrink-0">1</span>
+                      <span>Open GCash, Maya, or your mobile banking app.</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 font-mono text-[10px] flex-shrink-0">2</span>
+                      <span>Tap <strong>Scan QR</strong> and scan the code above.</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 font-mono text-[10px] flex-shrink-0">3</span>
+                      <span>Transfer <strong>₱150.00 PHP</strong> (or $2.99 USD).</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 font-mono text-[10px] flex-shrink-0">4</span>
+                      <span>Enter your reference number or sender name below.</span>
+                    </div>
+                  </div>
+
+                  {/* Verification Form */}
+                  <form onSubmit={handleConfirmPayment} className="mt-4">
+                    <label className="block text-[11px] font-medium text-zinc-300 mb-1">
+                      Transaction Reference Number or Sender Name:
+                    </label>
+                    <input
+                      type="text"
+                      value={refNumber}
+                      onChange={(e) => {
+                        setRefNumber(e.target.value);
+                        if (validationError) setValidationError('');
+                      }}
+                      placeholder="e.g. 1029384756 or Juan Dela Cruz"
+                      className="w-full rounded-xl border border-white/10 bg-black/60 px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                    />
+                    {validationError && (
+                      <p className="mt-1 text-[11px] text-rose-400">{validationError}</p>
+                    )}
+
+                    <button
+                      type="submit"
+                      className="mt-3 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 font-bold text-xs text-white shadow-[0_10px_20px_rgba(16,185,129,0.3)] transition-all active:scale-98 cursor-pointer"
+                    >
+                      <Check className="h-4 w-4" />
+                      <span>Confirm Payment & Download KODI</span>
+                    </button>
+                  </form>
+
+                  <div className="mt-3 flex items-center justify-center gap-3 text-[10px] text-zinc-500 font-mono">
+                    <span className="flex items-center gap-1">
+                      <ShieldCheck className="h-3 w-3 text-emerald-500" />
+                      Instant Unlock
+                    </span>
+                    <span>·</span>
+                    <span>Free Lifetime Updates</span>
+                    <span>·</span>
+                    <span>Windows 10/11 64-bit</span>
+                  </div>
+                </div>
+              )}
+
+              {paymentStep === 'verifying' && (
+                <div className="py-12 flex flex-col items-center justify-center text-center">
+                  <Loader2 className="h-10 w-10 text-emerald-400 animate-spin mb-4" />
+                  <h4 className="text-lg font-bold text-white">
+                    Verifying Transaction...
+                  </h4>
+                  <p className="text-xs text-zinc-400 mt-1 max-w-xs">
+                    Confirming reference #{refNumber}. Preparing your download package...
+                  </p>
+                </div>
+              )}
+
+              {paymentStep === 'unlocked' && (
+                <div className="py-6 flex flex-col items-center justify-center text-center">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 mb-4">
+                    <Check className="h-7 w-7" />
+                  </div>
+                  <h4 className="text-xl font-bold text-white">
+                    Payment Confirmed!
+                  </h4>
+                  <p className="text-xs text-zinc-400 mt-1 max-w-sm">
+                    Thank you for your purchase! Your official KODI installer download has started automatically.
+                  </p>
+
+                  <a
+                    href={downloadUrl}
+                    download="KODI_Setup.exe"
+                    className="mt-6 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-xs shadow-lg transition-all active:scale-98 cursor-pointer"
+                  >
+                    <Download className="h-4 w-4 text-emerald-600" />
+                    <span>Download KODI_Setup.exe (Manual Link)</span>
+                  </a>
+
+                  <button
+                    onClick={() => {
+                      if (typeof window !== 'undefined') {
+                        const link = document.createElement('a');
+                        link.href = downloadUrl;
+                        link.download = 'KODI_Setup.exe';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }
+                    }}
+                    className="mt-2 text-[11px] text-zinc-500 hover:text-zinc-300 underline cursor-pointer"
+                  >
+                    Click here if the download did not start
+                  </button>
+
+                  <div className="mt-6 w-full rounded-xl border border-white/5 bg-black/40 p-3 text-left text-[11px] text-zinc-400 space-y-1">
+                    <div className="font-semibold text-zinc-300">Getting Started:</div>
+                    <div>1. Run <code>KODI_Setup.exe</code> on your Windows PC.</div>
+                    <div>2. KODI will launch at the top-center of your screen.</div>
+                    <div>3. Press <code>Ctrl + Alt + K</code> anytime to toggle Stealth Mode.</div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </div>
