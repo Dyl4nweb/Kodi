@@ -15,7 +15,7 @@
   body {
     margin: 0;
     padding: 0;
-    background-color: transparent !important;
+    background-color: #050508;
     color: #f4f4f5;
   }
 
@@ -30,36 +30,63 @@
 }
 
 /* Completely eliminate all scrollbars, thumbs, tracks, and stepper buttons visually */
+html,
+body,
 *,
-*::-webkit-scrollbar,
-::-webkit-scrollbar,
-.custom-scrollbar::-webkit-scrollbar {
+*::before,
+*::after,
+.custom-scrollbar {
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
+}
+
+::-webkit-scrollbar {
   display: none !important;
-  width: 0 !important;
-  height: 0 !important;
+  width: 0px !important;
+  height: 0px !important;
   background: transparent !important;
 }
 
-*::-webkit-scrollbar-button,
-::-webkit-scrollbar-button,
-.custom-scrollbar::-webkit-scrollbar-button {
+*::-webkit-scrollbar {
   display: none !important;
-  width: 0 !important;
-  height: 0 !important;
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
 }
 
-*::-webkit-scrollbar-thumb,
+.custom-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-button,
+*::-webkit-scrollbar-button,
+.custom-scrollbar::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+  background: transparent !important;
+}
+
 ::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb,
 .custom-scrollbar::-webkit-scrollbar-thumb {
   display: none !important;
   background: transparent !important;
 }
 
-*::-webkit-scrollbar-track,
 ::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track,
 .custom-scrollbar::-webkit-scrollbar-track {
+  display: none !important;
+  background: transparent !important;
+}
+
+::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner,
+.custom-scrollbar::-webkit-scrollbar-corner {
   display: none !important;
   background: transparent !important;
 }

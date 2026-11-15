@@ -135,7 +135,10 @@ export const AntigravityWidget: React.FC<AntigravityWidgetProps> = ({
   })();
 
   return (
-    <div className="flex h-full flex-col gap-2 overflow-y-auto px-3.5 py-2.5 custom-scrollbar pb-4">
+    <div
+      className="flex h-full flex-col gap-2 overflow-y-auto px-3.5 py-2.5 pb-4 custom-scrollbar [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar-button]:hidden"
+      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+    >
       {/* Top Status & Sync Header */}
       <div className="flex items-center justify-between rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 flex-shrink-0">
         <div className="flex items-center gap-2.5">

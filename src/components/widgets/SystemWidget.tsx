@@ -35,7 +35,10 @@ export const SystemWidget: React.FC<SystemWidgetProps> = ({ stats }) => {
   };
 
   return (
-    <div className="flex h-full flex-col gap-2 p-3.5 overflow-y-auto custom-scrollbar pb-4">
+    <div
+      className="flex h-full flex-col gap-2 p-3.5 overflow-y-auto custom-scrollbar pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar-button]:hidden"
+      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+    >
       {/* Top Grid: CPU & Memory */}
       <div className="grid grid-cols-2 gap-2">
         {/* CPU Card */}

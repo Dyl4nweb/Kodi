@@ -11,32 +11,7 @@ import { WebLandingPage } from '@/components/WebLandingPage';
 import { isTauriEnvironment } from '@/lib/tauri';
 import { Film } from 'lucide-react';
 
-export default function KodiIslandPage() {
-  const [mounted, setMounted] = useState(false);
-  const [isWebBrowser, setIsWebBrowser] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const isExternalWeb =
-      typeof window !== 'undefined' &&
-      (window.location.hostname.includes('vercel.app') ||
-        window.location.hostname.includes('github.io') ||
-        (window.location.hostname === 'localhost' && window.location.port === '3000'));
-
-    if (isExternalWeb || !isTauriEnvironment()) {
-      setIsWebBrowser(true);
-      if (typeof document !== 'undefined') {
-        document.documentElement.style.overflow = 'auto';
-        document.body.style.overflow = 'auto';
-      }
-    } else {
-      if (typeof document !== 'undefined') {
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
-      }
-    }
-  }, []);
-
+function TauriDesktopIsland() {
   const {
     islandMode,
     setIslandMode,
@@ -69,25 +44,9 @@ export default function KodiIslandPage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [islandMode, setIslandMode]);
 
-  if (!mounted) {
-    return (
-      <main
-        className="flex h-full w-full flex-col items-center justify-start pt-0 bg-transparent select-none overflow-hidden"
-        data-tauri-drag-region
-      >
-        <div className="h-[34px] w-[350px] rounded-[17px] bg-black border border-white/[0.12] shadow-none" />
-      </main>
-    );
-  }
-
-  // When loaded in a web browser (Vercel, GitHub Pages, Chrome, etc.), show the full Product Landing Page
-  if (isWebBrowser) {
-    return <WebLandingPage />;
-  }
-
   return (
     <main
-      className="flex h-full w-full flex-col items-center justify-start pt-0 bg-transparent select-none overflow-hidden"
+      className="fixed inset-0 h-full w-full flex flex-col items-center justify-start pt-0 bg-transparent select-none overflow-hidden"
       data-tauri-drag-region
     >
       <AnimatePresence mode="wait">
@@ -186,4 +145,39 @@ export default function KodiIslandPage() {
       </AnimatePresence>
     </main>
   );
+}
+
+export default function KodiAppPage() {
+  const [isTauri, setIsTauri] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const inTauri = isTauriEnvironment();
+    setIsTauri(inTauri);
+
+    if (inTauri) {
+      if (typeof document !== 'undefined') {
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.backgroundColor = 'transparent';
+        document.body.style.backgroundColor = 'transparent';
+      }
+    } else {
+      if (typeof document !== 'undefined') {
+        document.documentElement.style.overflow = 'auto';
+        document.body.style.overflow = 'auto';
+        document.documentElement.style.backgroundColor = '#050508';
+        document.body.style.backgroundColor = '#050508';
+      }
+    }
+  }, []);
+
+  // When running inside Tauri desktop app, render the desktop island
+  if (mounted && isTauri) {
+    return <TauriDesktopIsland />;
+  }
+
+  // By default (and during SSR / static export on Vercel), render the full Product Landing Page
+  return <WebLandingPage />;
 }

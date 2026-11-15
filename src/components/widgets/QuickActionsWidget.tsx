@@ -127,7 +127,10 @@ export const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = ({
   ];
 
   return (
-    <div className="flex h-full flex-col gap-2 p-4 overflow-y-auto custom-scrollbar pb-6">
+    <div
+      className="flex h-full flex-col gap-2 p-4 overflow-y-auto custom-scrollbar pb-6 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar-button]:hidden"
+      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+    >
       <div className="text-[11px] font-medium uppercase tracking-wider text-zinc-500 mb-1">
         Desktop Utilities & Connectivity
       </div>

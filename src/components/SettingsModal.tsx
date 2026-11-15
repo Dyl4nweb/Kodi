@@ -123,7 +123,10 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         </div>
 
         {/* Content Pane */}
-        <div className="flex-1 overflow-y-auto p-4 custom-scrollbar text-xs">
+        <div
+          className="flex-1 overflow-y-auto p-4 custom-scrollbar text-xs [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar-button]:hidden"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
           {/* GENERAL SECTION */}
           {activeSection === 'general' && (
             <div className="flex flex-col gap-4">
