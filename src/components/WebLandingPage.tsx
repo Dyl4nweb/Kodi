@@ -34,7 +34,6 @@ import { SettingsModal } from './SettingsModal';
 import { useKodiState } from '@/hooks/useKodiState';
 
 export const WebLandingPage: React.FC = () => {
-  const [copiedWinget, setCopiedWinget] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const downloadUrl = '/KODI_Setup.exe';
 
@@ -71,12 +70,6 @@ export const WebLandingPage: React.FC = () => {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleCopyWinget = () => {
-    navigator.clipboard.writeText('winget install Dyl4nweb.Kodi');
-    setCopiedWinget(true);
-    setTimeout(() => setCopiedWinget(false), 2200);
   };
 
   // Quick preset triggers for the live sandbox
@@ -184,29 +177,16 @@ export const WebLandingPage: React.FC = () => {
           Monitor Google Antigravity & AI quotas in real time, command Spotify playback with animated vinyl disc visualizers, and manage system vitals — discreetly floating at the top of your screen.
         </p>
 
-        {/* Primary Download & Winget actions */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
+        {/* Primary Download action */}
+        <div className="mt-8 flex items-center justify-center">
           <a
             href={downloadUrl}
             download="KODI_Setup.exe"
-            className="group flex h-12 w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl bg-white px-7 text-sm font-semibold text-zinc-950 shadow-[0_12px_24px_rgba(255,255,255,0.15)] hover:bg-zinc-200 transition-all active:scale-98 cursor-pointer"
+            className="group flex h-12 items-center justify-center gap-2.5 rounded-xl bg-white px-8 text-sm font-semibold text-zinc-950 shadow-[0_12px_24px_rgba(255,255,255,0.15)] hover:bg-zinc-200 transition-all active:scale-98 cursor-pointer"
           >
             <Download className="h-4 w-4 text-emerald-600 transition-transform group-hover:-translate-y-0.5" />
-            <span>Download for Windows · $2.99 (~₱150)</span>
+            <span>Download KODI Pro · $2.99 (~₱150)</span>
           </a>
-
-          <button
-            onClick={handleCopyWinget}
-            className="group flex h-12 w-full sm:w-auto items-center justify-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] px-5 text-xs font-mono text-zinc-300 hover:border-white/20 hover:bg-white/[0.06] transition-all active:scale-98"
-          >
-            <Terminal className="h-3.5 w-3.5 text-zinc-500 group-hover:text-zinc-300" />
-            <span>winget install Dyl4nweb.Kodi</span>
-            {copiedWinget ? (
-              <Check className="h-3.5 w-3.5 text-emerald-400 ml-1" />
-            ) : (
-              <Copy className="h-3.5 w-3.5 text-zinc-500 group-hover:text-zinc-300 ml-1" />
-            )}
-          </button>
         </div>
 
         <div className="mt-4 flex items-center justify-center gap-4 text-[11px] text-zinc-500 font-mono">
@@ -580,55 +560,27 @@ export const WebLandingPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Option A: Direct Installer */}
-          <div className="rounded-2xl border border-white/[0.08] bg-zinc-950/40 p-6 flex flex-col justify-between hover:border-white/15 transition-all">
-            <div>
-              <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider mb-2">
-                Option 1 · Standalone Setup
-              </div>
-              <h4 className="text-lg font-semibold text-white">
-                Windows Executable (.exe)
-              </h4>
-              <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
-                Download the official NSIS installer and launch. Automatically creates your start menu shortcut and tray icon in your notification area.
-              </p>
-            </div>
-            <a
-              href={downloadUrl}
-              download="KODI_Setup.exe"
-              className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 text-xs font-semibold text-zinc-950 hover:bg-zinc-200 transition-all active:scale-98 cursor-pointer"
-            >
-              <Download className="h-3.5 w-3.5 text-emerald-600" />
-              <span>Download KODI_Setup.exe</span>
-            </a>
+        <div className="mx-auto max-w-lg rounded-2xl border border-white/[0.08] bg-zinc-950/40 p-8 flex flex-col items-center text-center hover:border-white/15 transition-all">
+          <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider mb-2">
+            Standalone Windows Executable
           </div>
-
-          {/* Option B: Terminal Winget */}
-          <div className="rounded-2xl border border-white/[0.08] bg-zinc-950/40 p-6 flex flex-col justify-between hover:border-white/15 transition-all">
-            <div>
-              <div className="text-xs font-mono text-zinc-500 uppercase tracking-wider mb-2">
-                Option 2 · Windows Package Manager
-              </div>
-              <h4 className="text-lg font-semibold text-white">
-                Command Line (winget)
-              </h4>
-              <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
-                Run this command in Windows Terminal or PowerShell for quick, automated installation and updates.
-              </p>
-            </div>
-            <button
-              onClick={handleCopyWinget}
-              className="mt-6 flex items-center justify-between rounded-xl border border-white/10 bg-black/70 px-4 py-2.5 font-mono text-xs text-zinc-300 hover:border-emerald-500/40 transition-all active:scale-98"
-            >
-              <span>winget install Dyl4nweb.Kodi</span>
-              {copiedWinget ? (
-                <Check className="h-3.5 w-3.5 text-emerald-400" />
-              ) : (
-                <Copy className="h-3.5 w-3.5 text-zinc-500" />
-              )}
-            </button>
-          </div>
+          <h4 className="text-xl font-bold text-white">
+            Official NSIS Installer (.exe)
+          </h4>
+          <p className="text-xs text-zinc-400 mt-2 max-w-sm leading-relaxed">
+            Download the official setup and run it. Automatically sets up your start menu shortcut and discreet system tray background icon.
+          </p>
+          <a
+            href={downloadUrl}
+            download="KODI_Setup.exe"
+            className="mt-6 flex items-center justify-center gap-2.5 rounded-xl bg-white px-8 py-3 text-xs font-bold text-zinc-950 hover:bg-zinc-200 transition-all active:scale-98 cursor-pointer shadow-lg shadow-white/10"
+          >
+            <Download className="h-4 w-4 text-emerald-600" />
+            <span>Download KODI_Setup.exe (64-bit)</span>
+          </a>
+          <span className="mt-3 text-[11px] font-mono text-zinc-500">
+            Version 1.1.1 · Windows 10 & 11 compatible · Offline
+          </span>
         </div>
       </section>
 
