@@ -23,8 +23,17 @@ export default function KodiIslandPage() {
         window.location.hostname.includes('github.io') ||
         (window.location.hostname === 'localhost' && window.location.port === '3000'));
 
-    if (isExternalWeb && !isTauriEnvironment()) {
+    if (isExternalWeb || !isTauriEnvironment()) {
       setIsWebBrowser(true);
+      if (typeof document !== 'undefined') {
+        document.documentElement.style.overflow = 'auto';
+        document.body.style.overflow = 'auto';
+      }
+    } else {
+      if (typeof document !== 'undefined') {
+        document.documentElement.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
+      }
     }
   }, []);
 
