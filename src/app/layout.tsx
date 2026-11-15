@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark bg-transparent">
-      <body className="bg-transparent font-sans antialiased overflow-x-hidden min-h-screen select-none">
+      <body className="bg-transparent font-sans antialiased overflow-hidden w-full h-full select-none">
         {children}
       </body>
     </html>

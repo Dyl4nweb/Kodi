@@ -3,14 +3,17 @@
 import React from 'react';
 import {
   AlignCenter,
+  Bluetooth,
   BrainCircuit,
+  EyeOff,
   Film,
   Minimize2,
   Music,
+  Radio,
   RefreshCw,
   Settings,
-  Sparkles,
   Terminal,
+  Wifi,
 } from 'lucide-react';
 import { invokeCommand } from '@/lib/tauri';
 
@@ -39,7 +42,29 @@ export const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = ({
     invokeCommand('hide_island').catch(console.error);
   };
 
+  const handleOpenBluetooth = () => {
+    invokeCommand('open_bluetooth_settings').catch(console.error);
+  };
+
+  const handleOpenWifi = () => {
+    invokeCommand('open_wifi_settings').catch(console.error);
+  };
+
   const actions = [
+    {
+      title: 'Bluetooth Settings',
+      desc: 'Manage Bluetooth devices & audio',
+      icon: Bluetooth,
+      color: 'text-blue-400',
+      action: handleOpenBluetooth,
+    },
+    {
+      title: 'Wi-Fi & Internet',
+      desc: 'Network status & connection settings',
+      icon: Wifi,
+      color: 'text-emerald-400',
+      action: handleOpenWifi,
+    },
     {
       title: 'Movie Mode',
       desc: 'Hide notch while watching (Ctrl+Alt+K)',
@@ -61,7 +86,7 @@ export const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = ({
       title: 'Refresh Quota',
       desc: 'Sync latest AI model limits',
       icon: RefreshCw,
-      color: 'text-sky-400',
+      color: 'text-zinc-300',
       action: onRefreshQuota,
     },
     {
@@ -95,8 +120,8 @@ export const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = ({
     {
       title: 'Hide to System Tray',
       desc: 'Keep running quietly in background',
-      icon: Sparkles,
-      color: 'text-purple-400',
+      icon: EyeOff,
+      color: 'text-zinc-400',
       action: handleHideToTray,
     },
   ];
@@ -104,7 +129,7 @@ export const QuickActionsWidget: React.FC<QuickActionsWidgetProps> = ({
   return (
     <div className="flex h-full flex-col gap-2 p-4 overflow-y-auto custom-scrollbar pb-6">
       <div className="text-[11px] font-medium uppercase tracking-wider text-zinc-500 mb-1">
-        Desktop Utilities
+        Desktop Utilities & Connectivity
       </div>
 
       <div className="grid grid-cols-2 gap-2">

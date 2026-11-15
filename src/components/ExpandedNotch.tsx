@@ -125,9 +125,9 @@ export const ExpandedNotch: React.FC<ExpandedNotchProps> = ({
             <button
               onClick={onCollapse}
               title="Back up to Dynamic Island (Esc)"
-              className="group/btn flex items-center gap-1 rounded-lg border border-sky-500/30 bg-sky-500/10 hover:bg-sky-500/25 px-2.5 py-1 text-xs font-medium text-sky-300 hover:text-white transition-all shadow-[0_0_12px_rgba(56,189,248,0.2)] active:scale-95"
+              className="group/btn flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 px-2.5 py-1 text-xs font-medium text-zinc-300 hover:text-white transition-all active:scale-95"
             >
-              <ChevronUp className="h-3.5 w-3.5 text-sky-400 transition-transform duration-200 group-hover/btn:-translate-y-0.5" />
+              <ChevronUp className="h-3.5 w-3.5 text-zinc-400 transition-transform duration-200 group-hover/btn:-translate-y-0.5 group-hover/btn:text-white" />
               <span className="text-[11px] font-semibold tracking-tight">Back up</span>
             </button>
           </div>

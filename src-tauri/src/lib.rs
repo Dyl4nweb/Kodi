@@ -5,6 +5,7 @@ pub mod system;
 pub mod window;
 
 use system::SystemState;
+use tauri::image::Image;
 use tauri::menu::{MenuBuilder, MenuItemBuilder};
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
 use tauri::{Emitter, Manager};
@@ -26,6 +27,8 @@ pub fn run() {
             window::show_island,
             window::toggle_visibility,
             system::get_system_stats,
+            system::open_bluetooth_settings,
+            system::open_wifi_settings,
             media::get_media_state,
             media::media_toggle_play_pause,
             media::media_next_track,
@@ -97,11 +100,15 @@ pub fn run() {
                     }
                 });
 
-            if let Some(icon) = app.default_window_icon() {
-                tray_builder = tray_builder.icon(icon.clone());
+            let tray_icon = Image::from_bytes(include_bytes!("../icons/32x32.png"))
+                .ok()
+                .or_else(|| app.default_window_icon().cloned());
+
+            if let Some(icon) = tray_icon {
+                tray_builder = tray_builder.icon(icon);
             }
 
-            // Safely attempt to initialize system tray without panicking or failing app setup
+            // Safely initialize system tray with fallback
             if let Err(e) = tray_builder.build(app) {
                 eprintln!("[KODI] System tray initialization skipped or failed: {}", e);
             }

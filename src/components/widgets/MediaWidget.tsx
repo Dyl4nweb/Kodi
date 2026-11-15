@@ -57,7 +57,7 @@ export const MediaWidget: React.FC<MediaWidgetProps> = ({
         </h3>
 
         <p className="mt-1 max-w-[260px] text-[11px] text-zinc-400 leading-relaxed">
-          Buksan ang Spotify sa iyong Windows PC at mag-play ng kanta. Awtomatikong magko-connect ang sound at playback controls dito sa Dynamic Island!
+          Open Spotify on your Windows PC and play any track. KODI seamlessly synchronizes album art, title, and playback controls!
         </p>
 
         <button
@@ -85,7 +85,7 @@ export const MediaWidget: React.FC<MediaWidgetProps> = ({
             </div>
           ) : (
             <div className="flex items-center gap-1.5 text-zinc-300 font-medium">
-              <Volume2 className="h-3.5 w-3.5 text-sky-400" />
+              <Volume2 className="h-3.5 w-3.5 text-emerald-400" />
               <span>{mediaState.app_name}</span>
             </div>
           )}
@@ -103,53 +103,65 @@ export const MediaWidget: React.FC<MediaWidgetProps> = ({
             </button>
           )}
           <span className="rounded-full bg-white/5 border border-white/10 px-2 py-0.5 text-[9px] font-mono text-zinc-400">
-            GSMTC Session
+            Live Stream
           </span>
         </div>
       </div>
 
-      {/* Main Track Display with Album Art */}
+      {/* Main Track Display with Album Art & Animated Vinyl Disc */}
       <div className="my-auto flex items-center gap-4 py-2">
-        {/* Album Artwork or Vinyl Spinner */}
-        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-2xl border border-white/10 bg-zinc-900 shadow-xl">
+        {/* Album Artwork or Vinyl Spinner with rotation animation */}
+        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-white/10 bg-zinc-950 shadow-2xl flex items-center justify-center">
           {mediaState.thumbnail_base64 ? (
             <img
               src={mediaState.thumbnail_base64}
               alt={mediaState.title}
-              className="h-full w-full object-cover"
+              className={`h-full w-full object-cover rounded-full ${
+                isPlaying ? 'animate-[spin_6s_linear_infinite]' : ''
+              }`}
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-zinc-800 to-zinc-950">
+            <div
+              className={`flex h-full w-full items-center justify-center bg-gradient-to-br from-zinc-800 to-black rounded-full ${
+                isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''
+              }`}
+            >
               <Disc3
-                className={`h-10 w-10 ${
-                  isSpotify ? 'text-[#1DB954]' : 'text-sky-400'
+                className={`h-11 w-11 ${
+                  isSpotify ? 'text-[#1DB954]' : 'text-zinc-300'
                 }`}
               />
             </div>
           )}
 
+          {/* Center spindle hole of the vinyl disc */}
+          <div className="absolute h-4 w-4 rounded-full border border-black bg-zinc-900 shadow-inner flex items-center justify-center pointer-events-none">
+            <div className="h-1.5 w-1.5 rounded-full bg-black" />
+          </div>
+
+          {/* Floating live sound equalizer indicator badge */}
           {isPlaying && (
-            <div className="absolute bottom-1 right-1 flex items-end gap-0.5 rounded-md bg-black/75 px-1.5 py-0.5 backdrop-blur-sm">
+            <div className="absolute bottom-0 right-0 flex items-end gap-0.5 rounded-full bg-black/85 px-1.5 py-1 border border-white/10 backdrop-blur-sm pointer-events-none">
               <span
-                className={`h-2 w-0.5 rounded-full ${
-                  isSpotify ? 'bg-[#1DB954]' : 'bg-sky-400'
+                className={`w-0.5 rounded-full animate-[music-bar-1_0.8s_ease-in-out_infinite] ${
+                  isSpotify ? 'bg-[#1DB954]' : 'bg-emerald-400'
                 }`}
               />
               <span
-                className={`h-3 w-0.5 rounded-full ${
-                  isSpotify ? 'bg-[#1DB954]' : 'bg-sky-400'
+                className={`w-0.5 rounded-full animate-[music-bar-2_1.1s_ease-in-out_infinite] ${
+                  isSpotify ? 'bg-[#1DB954]' : 'bg-emerald-400'
                 }`}
               />
               <span
-                className={`h-1.5 w-0.5 rounded-full ${
-                  isSpotify ? 'bg-[#1DB954]' : 'bg-sky-400'
+                className={`w-0.5 rounded-full animate-[music-bar-3_0.9s_ease-in-out_infinite] ${
+                  isSpotify ? 'bg-[#1DB954]' : 'bg-emerald-400'
                 }`}
               />
             </div>
           )}
         </div>
 
-        {/* Track Title, Artist, & Live Visualizer */}
+        {/* Track Title, Artist, & Live Animated Visualizer */}
         <div className="flex flex-col min-w-0 flex-1">
           <h3 className="truncate text-sm font-bold text-zinc-100">
             {mediaState.title || 'Unknown Title'}
@@ -165,13 +177,16 @@ export const MediaWidget: React.FC<MediaWidgetProps> = ({
 
           {/* Equalizer Wave Indicator */}
           {isPlaying && (
-            <div className="mt-2 flex items-center gap-1">
-              <span className="text-[9px] uppercase tracking-wider text-[#1DB954] font-mono">
-                Live Sound
-              </span>
-              <div className="flex items-center gap-0.5 ml-1">
-                <span className="h-1 w-1 rounded-full bg-[#1DB954]" />
+            <div className="mt-2.5 flex items-center gap-2">
+              <div className="flex items-end gap-1 h-3.5">
+                <span className="w-1 rounded-full bg-[#1DB954] animate-[music-bar-1_0.8s_ease-in-out_infinite]" />
+                <span className="w-1 rounded-full bg-[#1DB954] animate-[music-bar-2_1.1s_ease-in-out_infinite]" />
+                <span className="w-1 rounded-full bg-[#1DB954] animate-[music-bar-3_0.9s_ease-in-out_infinite]" />
+                <span className="w-1 rounded-full bg-[#1DB954] animate-[music-bar-4_0.7s_ease-in-out_infinite]" />
               </div>
+              <span className="text-[10px] uppercase tracking-wider text-[#1DB954] font-mono font-medium">
+                Live Equalizer
+              </span>
             </div>
           )}
         </div>
@@ -180,7 +195,7 @@ export const MediaWidget: React.FC<MediaWidgetProps> = ({
       {/* Playback Controls Bar */}
       <div className="flex items-center justify-between pt-2 border-t border-white/5">
         <div className="text-[10px] text-zinc-500 font-mono">
-          {isPlaying ? 'Playing on Spotify' : 'Paused'}
+          {isPlaying ? (isSpotify ? 'Playing on Spotify' : 'Active Audio') : 'Paused'}
         </div>
 
         <div className="flex items-center gap-3">

@@ -15,13 +15,13 @@
       {
         "title": "KODI",
         "label": "main",
-        "width": 430,
-        "height": 48,
+        "width": 384,
+        "height": 40,
         "resizable": false,
         "transparent": true,
         "decorations": false,
         "alwaysOnTop": true,
-        "skipTaskbar": false,
+        "skipTaskbar": true,
         "shadow": false,
         "center": false,
         "visible": true

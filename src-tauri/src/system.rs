@@ -105,3 +105,21 @@ pub fn get_system_stats(state: tauri::State<'_, SystemState>) -> Result<SystemSt
         uptime_seconds,
     })
 }
+
+#[tauri::command]
+pub fn open_bluetooth_settings() -> Result<(), String> {
+    std::process::Command::new("cmd")
+        .args(["/c", "start", "ms-settings:bluetooth"])
+        .spawn()
+        .map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+pub fn open_wifi_settings() -> Result<(), String> {
+    std::process::Command::new("cmd")
+        .args(["/c", "start", "ms-settings:network-wifi"])
+        .spawn()
+        .map_err(|e| e.to_string())?;
+    Ok(())
+}

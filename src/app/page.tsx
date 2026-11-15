@@ -63,10 +63,10 @@ export default function KodiIslandPage() {
   if (!mounted) {
     return (
       <main
-        className="flex min-h-screen w-full flex-col items-center justify-start pt-0 bg-transparent select-none overflow-hidden"
+        className="flex h-full w-full flex-col items-center justify-start pt-0 bg-transparent select-none overflow-hidden"
         data-tauri-drag-region
       >
-        <div className="h-[38px] w-[392px] rounded-[19px] bg-black/95 border border-white/[0.12] shadow-[0_10px_32px_rgba(0,0,0,0.95)]" />
+        <div className="h-[38px] w-[384px] rounded-[19px] bg-black/95 border border-white/[0.12] shadow-[0_10px_32px_rgba(0,0,0,0.95)]" />
       </main>
     );
   }
@@ -78,7 +78,7 @@ export default function KodiIslandPage() {
 
   return (
     <main
-      className="flex min-h-screen w-full flex-col items-center justify-start pt-0 bg-transparent select-none overflow-hidden"
+      className="flex h-full w-full flex-col items-center justify-start pt-0 bg-transparent select-none overflow-hidden"
       data-tauri-drag-region
     >
       <AnimatePresence mode="wait">

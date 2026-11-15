@@ -16,8 +16,8 @@ pub fn apply_island_mode(
 ) -> Result<WindowDimensions, String> {
     let (target_width, target_height) = match mode {
         "compact" => (
-            custom_width.unwrap_or(430.0),
-            custom_height.unwrap_or(48.0),
+            custom_width.unwrap_or(384.0),
+            custom_height.unwrap_or(40.0),
         ),
         "notification" => (
             custom_width.unwrap_or(440.0),
