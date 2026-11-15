@@ -16,22 +16,22 @@ pub fn apply_island_mode(
 ) -> Result<WindowDimensions, String> {
     let (target_width, target_height) = match mode {
         "compact" => (
-            custom_width.unwrap_or(384.0),
-            custom_height.unwrap_or(40.0),
+            custom_width.unwrap_or(350.0),
+            custom_height.unwrap_or(36.0),
         ),
         "notification" => (
-            custom_width.unwrap_or(440.0),
-            custom_height.unwrap_or(78.0),
+            custom_width.unwrap_or(400.0),
+            custom_height.unwrap_or(68.0),
         ),
         "expanded" => (
-            custom_width.unwrap_or(530.0),
-            custom_height.unwrap_or(520.0),
+            custom_width.unwrap_or(430.0),
+            custom_height.unwrap_or(400.0),
         ),
         "settings" => (
-            custom_width.unwrap_or(540.0),
-            custom_height.unwrap_or(510.0),
+            custom_width.unwrap_or(430.0),
+            custom_height.unwrap_or(400.0),
         ),
-        _ => (430.0, 48.0),
+        _ => (350.0, 36.0),
     };
 
     // Find the monitor where the window currently resides or primary monitor

@@ -135,7 +135,7 @@ export const AntigravityWidget: React.FC<AntigravityWidgetProps> = ({
   })();
 
   return (
-    <div className="flex h-full flex-col gap-2.5 overflow-y-auto px-4 py-3 custom-scrollbar pb-6">
+    <div className="flex h-full flex-col gap-2 overflow-y-auto px-3.5 py-2.5 custom-scrollbar pb-4">
       {/* Top Status & Sync Header */}
       <div className="flex items-center justify-between rounded-xl border border-white/[0.08] bg-white/[0.02] p-2.5 flex-shrink-0">
         <div className="flex items-center gap-2.5">
@@ -263,7 +263,7 @@ export const AntigravityWidget: React.FC<AntigravityWidgetProps> = ({
             return (
               <div
                 key={model.id}
-                className="group relative flex flex-col gap-1.5 rounded-xl border border-white/[0.06] bg-[#0c0d10] p-2.5 shadow-sm transition-all hover:border-white/15 hover:bg-[#111317]"
+                className="group relative flex flex-col gap-1.5 rounded-xl border border-white/[0.06] bg-[#0c0d10] p-2.5 transition-all hover:border-white/15 hover:bg-[#111317]"
               >
                 {/* Model Header */}
                 <div className="flex items-center justify-between">

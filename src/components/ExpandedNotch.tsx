@@ -62,17 +62,17 @@ export const ExpandedNotch: React.FC<ExpandedNotchProps> = ({
   return (
     <motion.div
       layoutId="kodi-notch-container"
-      className="relative flex h-[495px] w-[500px] flex-col rounded-[26px] border border-white/[0.12] bg-[#000000]/95 shadow-[0_24px_60px_rgba(0,0,0,0.98)] backdrop-blur-3xl select-none transform-gpu will-change-transform"
+      className="relative flex h-[400px] w-[430px] flex-col rounded-[22px] border border-white/[0.12] bg-[#000000] shadow-none backdrop-blur-3xl select-none transform-gpu will-change-transform"
       initial={{ scale: 0.98, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.98, opacity: 0 }}
       transition={{ type: 'spring', stiffness: 420, damping: 32, mass: 0.85 }}
     >
       {/* Top subtle specular highlight */}
-      <div className="pointer-events-none absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-8 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 
       {/* Inner Container with overflow-hidden & rounded-b to smoothly clip scroll contents */}
-      <div className="flex h-full w-full flex-col overflow-hidden rounded-[26px]">
+      <div className="flex h-full w-full flex-col overflow-hidden rounded-[22px]">
         {/* Top Navigation & Controls Bar */}
         <div className="flex items-center justify-between border-b border-white/[0.08] bg-white/[0.02] px-4 py-2 flex-shrink-0">
           {/* Left: Brand Identity with Click-to-Collapse */}
@@ -182,7 +182,7 @@ export const ExpandedNotch: React.FC<ExpandedNotchProps> = ({
           title="Click to collapse notch up [Esc]"
           className="group/grab flex h-7 w-full cursor-pointer items-center justify-center gap-1.5 border-t border-white/[0.06] bg-gradient-to-t from-black via-black/90 to-black/60 hover:bg-white/10 transition-all select-none flex-shrink-0"
         >
-          <ChevronUp className="h-3.5 w-3.5 text-zinc-400 group-hover/grab:text-sky-400 group-hover/grab:-translate-y-0.5 transition-all" />
+          <ChevronUp className="h-3.5 w-3.5 text-zinc-400 group-hover/grab:text-white group-hover/grab:-translate-y-0.5 transition-all" />
           <span className="text-[11px] font-medium text-zinc-400 group-hover/grab:text-zinc-100 transition-colors">
             Back up · Collapse
           </span>

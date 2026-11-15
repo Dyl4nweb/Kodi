@@ -41,7 +41,7 @@ export const MediaWidget: React.FC<MediaWidgetProps> = ({
     return (
       <div className="flex h-full flex-col items-center justify-center p-5 text-center">
         {/* Spotify Brand Card */}
-        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1DB954]/10 border border-[#1DB954]/25 text-[#1DB954] mb-3 shadow-[0_0_20px_rgba(29,185,84,0.15)]">
+        <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-[#1DB954]/10 border border-[#1DB954]/25 text-[#1DB954] mb-3">
           {/* Custom SVG Spotify Logo */}
           <svg
             className="h-8 w-8 fill-current"
@@ -111,7 +111,7 @@ export const MediaWidget: React.FC<MediaWidgetProps> = ({
       {/* Main Track Display with Album Art & Animated Vinyl Disc */}
       <div className="my-auto flex items-center gap-4 py-2">
         {/* Album Artwork or Vinyl Spinner with rotation animation */}
-        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-white/10 bg-zinc-950 shadow-2xl flex items-center justify-center">
+        <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-full border-2 border-white/10 bg-zinc-950 flex items-center justify-center">
           {mediaState.thumbnail_base64 ? (
             <img
               src={mediaState.thumbnail_base64}
@@ -210,9 +210,9 @@ export const MediaWidget: React.FC<MediaWidgetProps> = ({
           <button
             onClick={onTogglePlayPause}
             title={isPlaying ? 'Pause' : 'Play'}
-            className={`flex h-11 w-11 items-center justify-center rounded-full shadow-lg transition-transform active:scale-95 ${
+            className={`flex h-11 w-11 items-center justify-center rounded-full transition-transform active:scale-95 ${
               isSpotify
-                ? 'bg-[#1DB954] text-black hover:bg-[#1ed760] shadow-[#1DB954]/25'
+                ? 'bg-[#1DB954] text-black hover:bg-[#1ed760]'
                 : 'bg-white text-black hover:bg-zinc-200'
             }`}
           >

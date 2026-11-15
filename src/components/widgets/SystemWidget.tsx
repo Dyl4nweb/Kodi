@@ -35,14 +35,14 @@ export const SystemWidget: React.FC<SystemWidgetProps> = ({ stats }) => {
   };
 
   return (
-    <div className="flex h-full flex-col gap-3 p-4 overflow-y-auto custom-scrollbar pb-6">
+    <div className="flex h-full flex-col gap-2 p-3.5 overflow-y-auto custom-scrollbar pb-4">
       {/* Top Grid: CPU & Memory */}
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="grid grid-cols-2 gap-2">
         {/* CPU Card */}
-        <div className="flex flex-col rounded-xl border border-white/5 bg-[#0e0f12] p-3 shadow-sm">
+        <div className="flex flex-col rounded-xl border border-white/5 bg-[#0e0f12] p-2.5">
           <div className="flex items-center justify-between text-zinc-400">
             <span className="text-xs font-medium">Processor</span>
-            <Cpu className="h-4 w-4 text-sky-400" />
+            <Cpu className="h-4 w-4 text-zinc-300" />
           </div>
           <div className="mt-2 flex items-baseline gap-1">
             <span className="font-mono text-2xl font-bold text-white">
@@ -58,7 +58,7 @@ export const SystemWidget: React.FC<SystemWidgetProps> = ({ stats }) => {
                   ? 'bg-rose-500'
                   : stats.cpu_percent > 50
                   ? 'bg-amber-400'
-                  : 'bg-sky-400'
+                  : 'bg-emerald-400'
               }`}
               style={{ width: `${Math.min(100, stats.cpu_percent)}%` }}
             />
@@ -66,7 +66,7 @@ export const SystemWidget: React.FC<SystemWidgetProps> = ({ stats }) => {
         </div>
 
         {/* Memory Card */}
-        <div className="flex flex-col rounded-xl border border-white/5 bg-[#0e0f12] p-3 shadow-sm">
+        <div className="flex flex-col rounded-xl border border-white/5 bg-[#0e0f12] p-2.5">
           <div className="flex items-center justify-between text-zinc-400">
             <span className="text-xs font-medium">RAM</span>
             <HardDrive className="h-4 w-4 text-emerald-400" />
@@ -93,7 +93,7 @@ export const SystemWidget: React.FC<SystemWidgetProps> = ({ stats }) => {
       {/* Power & Network Status */}
       <div className="grid grid-cols-2 gap-2.5">
         {/* Battery / Power Card */}
-        <div className="flex flex-col rounded-xl border border-white/5 bg-[#0e0f12] p-3 shadow-sm">
+        <div className="flex flex-col rounded-xl border border-white/5 bg-[#0e0f12] p-2.5">
           <div className="flex items-center justify-between text-zinc-400">
             <span className="text-xs font-medium">Power</span>
             {stats.battery_charging ? (
@@ -176,7 +176,7 @@ export const SystemWidget: React.FC<SystemWidgetProps> = ({ stats }) => {
         </div>
 
         {/* Network & Connectivity Card */}
-        <div className="flex flex-col justify-between rounded-xl border border-white/5 bg-[#0e0f12] p-3 shadow-sm">
+        <div className="flex flex-col justify-between rounded-xl border border-white/5 bg-[#0e0f12] p-2.5">
           <div className="flex items-center justify-between text-zinc-400">
             <span className="text-xs font-medium">Network</span>
             <div

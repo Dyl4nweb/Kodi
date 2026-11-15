@@ -15,8 +15,8 @@
       {
         "title": "KODI",
         "label": "main",
-        "width": 384,
-        "height": 40,
+        "width": 350,
+        "height": 36,
         "resizable": false,
         "transparent": true,
         "decorations": false,

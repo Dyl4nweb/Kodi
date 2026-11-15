@@ -304,7 +304,7 @@ export const WebLandingPage: React.FC = () => {
                   onPreviousTrack={previousTrack}
                 />
               ) : (
-                <div className="h-[490px] w-[520px] p-2">
+                <div className="h-[400px] w-[430px] p-0">
                   <SettingsModal
                     settings={settings}
                     onSave={updateSettings}

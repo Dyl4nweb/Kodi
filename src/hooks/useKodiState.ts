@@ -52,18 +52,18 @@ export function useKodiState() {
 
   // Sync window size with Tauri whenever islandMode changes
   useEffect(() => {
-    let targetWidth = 430;
-    let targetHeight = 48;
+    let targetWidth = 350;
+    let targetHeight = 36;
 
     if (islandMode === 'expanded') {
-      targetWidth = 530;
-      targetHeight = 520;
+      targetWidth = 430;
+      targetHeight = 400;
     } else if (islandMode === 'notification') {
-      targetWidth = 440;
-      targetHeight = 78;
+      targetWidth = 390;
+      targetHeight = 64;
     } else if (islandMode === 'settings') {
-      targetWidth = 540;
-      targetHeight = 510;
+      targetWidth = 430;
+      targetHeight = 400;
     }
 
     invokeCommand('set_island_mode', {

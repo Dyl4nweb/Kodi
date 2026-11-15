@@ -75,7 +75,7 @@ export default function KodiIslandPage() {
         className="flex h-full w-full flex-col items-center justify-start pt-0 bg-transparent select-none overflow-hidden"
         data-tauri-drag-region
       >
-        <div className="h-[38px] w-[384px] rounded-[19px] bg-black/95 border border-white/[0.12] shadow-[0_10px_32px_rgba(0,0,0,0.95)]" />
+        <div className="h-[34px] w-[350px] rounded-[17px] bg-black border border-white/[0.12] shadow-none" />
       </main>
     );
   }
@@ -173,7 +173,7 @@ export default function KodiIslandPage() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.2 }}
-            className="h-[480px] w-[510px] pt-2"
+            className="h-[400px] w-[430px] pt-0"
           >
             <SettingsModal
               settings={settings}

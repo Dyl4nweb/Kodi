@@ -25,14 +25,14 @@ export const NotificationBanner: React.FC<NotificationBannerProps> = ({
       case 'warning':
         return <AlertTriangle className="h-4 w-4 text-amber-400" />;
       default:
-        return <Bell className="h-4 w-4 text-sky-400" />;
+        return <Bell className="h-4 w-4 text-emerald-400" />;
     }
   };
 
   return (
     <motion.div
       layoutId="kodi-notch-container"
-      className="relative flex h-[74px] w-[410px] items-center justify-between rounded-3xl border border-white/10 bg-[#08080a]/95 px-4 py-2.5 shadow-[0_12px_40px_rgba(0,0,0,0.9)] backdrop-blur-2xl"
+      className="relative flex h-[64px] w-[390px] items-center justify-between rounded-[20px] border border-white/10 bg-[#000000] px-4 py-2 shadow-none backdrop-blur-2xl"
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.95, opacity: 0 }}

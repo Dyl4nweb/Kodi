@@ -71,7 +71,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   };
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-3xl bg-[#000000] border border-white/[0.08] text-zinc-100 shadow-[0_24px_60px_rgba(0,0,0,0.95)]">
+    <div className="flex h-full flex-col overflow-hidden rounded-[22px] bg-[#000000] border border-white/[0.12] text-zinc-100 shadow-none">
       {/* Modal Header */}
       <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
         <div className="flex items-center gap-2.5">

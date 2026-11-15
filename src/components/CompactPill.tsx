@@ -80,8 +80,8 @@ export const CompactPill: React.FC<CompactPillProps> = ({
     <motion.div
       layoutId="kodi-notch-container"
       onClick={onExpand}
-      className="group relative flex h-[38px] w-[384px] cursor-pointer items-center justify-between rounded-[19px] bg-black/95 px-3 py-1 shadow-[0_10px_32px_rgba(0,0,0,0.95)] border border-white/[0.12] transition-all duration-300 select-none hover:border-white/[0.22] hover:shadow-[0_12px_36px_rgba(0,0,0,0.98)] transform-gpu will-change-transform"
-      whileHover={{ y: 1.5, scale: 1.002 }}
+      className="group relative flex h-[34px] w-[350px] cursor-pointer items-center justify-between rounded-[17px] bg-black px-3 py-0.5 border border-white/[0.12] transition-all duration-300 select-none hover:border-white/[0.24] transform-gpu will-change-transform shadow-none"
+      whileHover={{ y: 1, scale: 1.002 }}
       whileTap={{ scale: 0.985 }}
       transition={{ type: 'spring', stiffness: 420, damping: 30, mass: 0.8 }}
     >
